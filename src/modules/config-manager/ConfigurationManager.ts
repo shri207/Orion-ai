@@ -25,7 +25,7 @@ export class ConfigurationManager {
       models: {
         provider: envLoader.get('MODEL_PROVIDER', 'openrouter'),
         defaultModel: envLoader.get('DEFAULT_MODEL', 'anthropic/claude-3-5-sonnet'),
-        apiKey: envLoader.get('AI_API_KEY', ''),
+        apiKey: envLoader.get('AI_API_KEY', envLoader.get('OPENROUTER_API_KEY', '')),
         maxTokens: envLoader.getNumber('MODEL_MAX_TOKENS', 2048),
         temperature: envLoader.getNumber('MODEL_TEMPERATURE', 0.7),
         timeoutMs: envLoader.getNumber('MODEL_TIMEOUT_MS', 30000),
