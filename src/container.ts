@@ -132,7 +132,9 @@ export const sessionManager = {
     if (!existingCandidate) {
       try {
         // Try to pull candidate details from the cohort JSON file
-        const cohortRaw = await fs.readFile('d:/PROJECTS/candidates.json', 'utf-8');
+        const path = require('path');
+        const cohortFilePath = path.join(process.cwd(), 'frontend', 'src', 'data', 'candidates.json');
+        const cohortRaw = await fs.readFile(cohortFilePath, 'utf-8');
         const cohortData = JSON.parse(cohortRaw) as { candidates: Array<{ member: { id: string; name: string; jobRole: string; yearsExperience: number } }> };
         const cohortEntry = cohortData.candidates.find(c => c.member.id === candidateId);
 
