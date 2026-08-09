@@ -1,366 +1,118 @@
-# AI Interview Agent
+# Orion AI
 
-> An autonomous AI interviewer that conducts realistic technical interviews, evaluates candidates, adapts questions in real-time, and generates detailed feedback.
+Orion AI is a cutting-edge, AI-powered technical interviewer platform. It conducts adaptive, real-time technical interviews tailored to specific curriculums, evaluates candidates across multiple dimensions (technical depth, communication, problem-solving, and confidence), and generates comprehensive assessment reports and hiring recommendations.
 
----
+## Features
 
-# Overview
+- 🤖 **Adaptive AI Interviewer**: Leverages OpenRouter and advanced LLMs to conduct dynamic, conversational interviews that adapt in difficulty based on the candidate's performance.
+- 🎯 **Curriculum-Based Pacing**: Automatically cycles through required topics from a structured curriculum (e.g., Node.js Basics, Databases, Express.js), ensuring complete technical coverage.
+- 📊 **Multidimensional Scoring**: Evaluates answers across various criteria, detecting knowledge gaps and providing a detailed breakdown of strengths and areas for improvement.
+- 📜 **Comprehensive Assessment Reports**: Generates detailed final reports with a complete question history, overall score, confidence ratings, and an AI-driven hiring recommendation.
+- 🕰️ **History Dashboard**: A dedicated dashboard for recruiters to view all past interview sessions, complete with performance scores and durations.
+- ⚡ **Real-Time Communication**: Uses WebSockets for seamless, instant, two-way communication during the interview.
 
-The AI Interview Agent is designed to simulate an experienced technical interviewer.
+## Tech Stack
 
-Instead of simply asking predefined questions, the system:
-
-- Understands the candidate profile
-- Selects interview topics dynamically
-- Generates contextual questions
-- Creates follow-up questions based on answers
-- Detects weak and strong areas
-- Adjusts interview difficulty
-- Scores communication and technical knowledge
-- Produces comprehensive interview reports
-
-The goal is to replicate a real-world engineering interview while remaining scalable and customizable.
-
----
-
-# Core Features
-
-## Candidate Profile Analysis
-
-The system analyzes:
-
-- Resume
-- Skills
-- Experience
-- Target role
-- Seniority
-- Preferred technologies
-
-This profile becomes the interview context.
-
----
-
-## Dynamic Topic Selection
-
-Instead of fixed question lists, the AI chooses topics during the interview based on:
-
-- Curriculum
-- Job requirements
-- Candidate experience
-- Previous answers
-- Difficulty progression
-
-Example:
-
-```
-Candidate:
-Node.js
-Express
-MongoDB
-
-↓
-
-Interview Starts
-
-↓
-
-Node Basics
-
-↓
-
-Express
-
-↓
-
-REST APIs
-
-↓
-
-Authentication
-
-↓
-
-JWT
-
-↓
-
-Security
-
-↓
-
-Scaling
-```
-
----
-
-## AI Question Generation
-
-Questions are generated in real time.
-
-They are not stored in a database.
-
-Each question depends on:
-
-- Current topic
-- Previous answer
-- Difficulty level
-- Candidate confidence
-- Remaining interview time
-
----
-
-## Follow-up Engine
-
-The interviewer listens to every answer.
-
-If an answer is:
-
-Good
-→ Go deeper.
-
-Weak
-→ Ask easier question.
-
-Incorrect
-→ Explore the misunderstanding.
-
-Excellent
-→ Increase difficulty.
-
-This creates natural conversations.
-
----
-
-## Evaluation System
-
-Every answer is evaluated on multiple dimensions.
-
-Example:
-
-Technical Accuracy
-
-Problem Solving
-
-Depth of Knowledge
-
-Communication
-
-Confidence
-
-Completeness
-
-Reasoning
-
-Practical Experience
-
----
-
-## Interview Report
-
-At the end the AI generates:
-
-Overall Score
-
-Topic-wise Scores
-
-Strengths
-
-Weaknesses
-
-Missed Concepts
-
-Improvement Suggestions
-
-Hiring Recommendation
-
-Difficulty Analysis
-
-Interview Summary
-
----
-
-# High-Level Workflow
-
-```
-Candidate
-
-↓
-
-Profile Analysis
-
-↓
-
-Interview Planning
-
-↓
-
-Topic Selection
-
-↓
-
-Question Generation
-
-↓
-
-Candidate Answer
-
-↓
-
-Answer Evaluation
-
-↓
-
-Follow-up Decision
-
-↓
-
-Next Question
-
-↓
-
-Repeat
-
-↓
-
-Final Evaluation
-
-↓
-
-Feedback Report
-```
-
----
-
-# Tech Stack
-
-## Frontend
-
-- React
-- Vite
+**Frontend:**
+- React (Vite)
 - Tailwind CSS
-- React Router
-- Axios
+- Framer Motion (Animations)
+- Zustand (State Management)
 
----
+**Backend:**
+- Node.js & Express
+- Prisma ORM (PostgreSQL)
+- WebSockets (`ws`)
+- OpenRouter API (LLM Integration)
 
-## Backend
+## Prerequisites
 
-- Node.js
-- Express.js
-- TypeScript
-- Pino (Logging)
+Before you begin, ensure you have met the following requirements:
+- Node.js (v18+)
+- PostgreSQL Database
+- An OpenRouter API Key
 
----
+## Getting Started
 
-## Setup and Development
+### 1. Clone the repository
 
-1. **Install dependencies:**
-   ```bash
-   pnpm install
-   ```
-
-2. **Setup environment variables:**
-   Copy `.env.example` to `.env` and fill in your OpenRouter API key.
-
-3. **Run the development server:**
-   ```bash
-   pnpm run dev
-   ```
-
-The server will start on `http://localhost:3000` (or your configured `PORT`). You can verify the server is running by hitting the health check endpoint at `GET /health`.
-
----
-
-## AI
-
-- OpenRouter API
-- Multiple LLM Support
-- Configurable Models
-
----
-
-## Storage
-
-Initially:
-
-- JSON Files
-
-Later:
-
-- PostgreSQL
-or
-- MongoDB
-
----
-
-## Authentication
-
-Planned
-
-- JWT
-- Role-based access
-
----
-
-# Project Goals
-
-Build an interviewer—not just a chatbot.
-
-The AI should behave like a senior engineering interviewer capable of conducting adaptive interviews for multiple technical domains.
-
----
-
-# Future Features
-
-- Voice interviews
-- Screen sharing
-- Coding interviews
-- Whiteboard mode
-- Live code execution
-- ATS resume parsing
-- Company-specific interview modes
-- Multi-round interviews
-- Team interviews
-- Behavioral interviews
-- Analytics dashboard
-- Candidate history
-- Organization management
-
----
-
-# Project Structure (Planned)
-
-```
-client/
-server/
-
-docs/
-
-curriculum/
-
-prompts/
-
-reports/
-
-interviews/
-
-uploads/
+```bash
+git clone https://github.com/shri207/Orion-ai.git
+cd Orion-ai
 ```
 
----
+### 2. Backend Setup
 
-# Development Philosophy
+Install backend dependencies:
+```bash
+npm install
+```
 
-- AI-first architecture
-- Modular services
-- Prompt-driven logic
-- Easy model swapping via OpenRouter
-- Production-ready codebase
-- Extensible agent pipeline
-- Clean separation of responsibilities
+Set up your `.env` file in the root directory:
+```env
+# Server
+PORT=3000
+NODE_ENV=development
 
----
+# Database (PostgreSQL)
+DATABASE_URL="postgres://username:password@localhost:5432/orion"
 
-# License
+# AI Integration
+OPENROUTER_API_KEY="your-openrouter-api-key"
+AI_MODEL_INTERVIEWER="anthropic/claude-3.5-sonnet:beta"
 
-MIT License
+# Other
+JWT_SECRET="your-jwt-secret"
+FRONTEND_URL="http://localhost:5173"
+```
+
+Run the database migrations to set up your PostgreSQL schema:
+```bash
+npx prisma migrate dev --name init
+```
+
+Start the backend development server:
+```bash
+npm run dev
+```
+
+### 3. Frontend Setup
+
+Open a new terminal window and navigate to the frontend directory:
+```bash
+cd frontend
+npm install
+```
+
+Set up your frontend environment variables by creating a `.env` file in the `frontend` directory:
+```env
+VITE_API_URL="http://localhost:3000"
+VITE_API_KEY="your-optional-api-key"
+```
+
+Start the frontend development server:
+```bash
+npm run dev
+```
+
+The frontend will be available at `http://localhost:5173`.
+
+## Deployment
+
+### Backend (Railway)
+1. Create a new project on Railway and provision a PostgreSQL database.
+2. Link this GitHub repository.
+3. In the Railway dashboard, set all the environment variables from your root `.env` file.
+4. Set the Build Command to `npm install && npx prisma generate && npm run build`.
+5. Set the Start Command to `npm run start`.
+6. Run `npm run migrate` on the Railway terminal to initialize the database tables.
+
+### Frontend (Vercel)
+1. Import this repository into Vercel.
+2. Ensure the root directory is set to `./` (not `frontend`). The custom `vercel.json` will handle building the frontend correctly.
+3. Add the `VITE_API_URL` environment variable pointing to your deployed Railway backend URL (ensure it starts with `https://`).
+4. Click Deploy.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
