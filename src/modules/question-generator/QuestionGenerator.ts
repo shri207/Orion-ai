@@ -2,20 +2,33 @@ import { IQuestionGenerator } from './QuestionGeneratorInterfaces';
 import { IQuestionGeneratorParams, IGeneratedQuestion } from './QuestionGeneratorTypes';
 import { QuestionGeneratorValidator } from './QuestionGeneratorValidator';
 import { ILLMClient, ILLMMessage } from '../../services/llm/LLMInterfaces';
+import { IRagService } from '../rag/RagTypes';
 import { logger } from '../../utils/logger';
 import fs from 'fs/promises';
 import path from 'path';
 
 export class QuestionGenerator implements IQuestionGenerator {
-  constructor(private readonly llmClient: ILLMClient) {}
+  constructor(
+    private readonly llmClient: ILLMClient,
+    private readonly ragService?: IRagService
+  ) {}
 
   public async generateQuestion(params: IQuestionGeneratorParams): Promise<IGeneratedQuestion> {
     const { topic, difficulty, interviewType, interviewRole, candidateProfile, previousQuestions, additionalContext } = params;
     
     logger.info({ topicId: topic.id, difficulty, interviewType }, 'Starting question generation');
+
+    // RAG: retrieve curriculum context for this topic
+    let ragContext = 'No additional curriculum context available.';
+    if (this.ragService?.isReady) {
+      const ragQuery = `${topic.name} ${topic.description ?? ''}`;
+      const ragResult = await this.ragService.retrieveContext(topic.id, ragQuery);
+      ragContext = ragResult.context;
+      logger.debug({ topicId: topic.id }, '[RAG] Context retrieved for question generation');
+    }
     
     const promptTemplate = await this.loadPromptTemplate();
-    const systemPrompt = this.buildSystemPrompt(promptTemplate, params);
+    const systemPrompt = this.buildSystemPrompt(promptTemplate, params, ragContext);
     
     const messages: ILLMMessage[] = [
       { role: 'system', content: systemPrompt },
@@ -59,7 +72,7 @@ export class QuestionGenerator implements IQuestionGenerator {
     }
   }
 
-  private buildSystemPrompt(template: string, params: IQuestionGeneratorParams): string {
+  private buildSystemPrompt(template: string, params: IQuestionGeneratorParams, ragContext: string): string {
     const candidateContext = params.candidateProfile 
       ? `Candidate Experience: ${params.candidateProfile.yearsOfExperience} years. Background: ${params.candidateProfile.resumeSummary}`
       : 'No candidate background provided.';
@@ -76,6 +89,7 @@ export class QuestionGenerator implements IQuestionGenerator {
       .replace('{{DIFFICULTY}}', params.difficulty)
       .replace('{{CANDIDATE_CONTEXT}}', candidateContext)
       .replace('{{PREVIOUS_QUESTIONS}}', previousQContext)
+      .replace('{{RAG_CONTEXT}}', ragContext)
       .replace('{{ADDITIONAL_CONTEXT}}', params.additionalContext || 'None');
 
     return prompt;

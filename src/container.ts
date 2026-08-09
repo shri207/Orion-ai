@@ -36,6 +36,7 @@ import { ITopic } from './modules/curriculum/CurriculumTypes';
 import { ICandidateAnalyzerParams } from './modules/candidate-analyzer/CandidateAnalyzerTypes';
 import { ICommunicationAnalyzerResult } from './modules/communication-analyzer/CommunicationAnalyzerTypes';
 import { InterviewType } from './modules/question-generator/QuestionGeneratorTypes';
+import { ragService } from './modules/rag/RagService';
 import { getIO } from './websocket/socket';
 import fs from 'fs/promises';
 
@@ -90,13 +91,13 @@ const llmClient = process.env.NODE_ENV === 'test'
   : new OpenRouterClient();
 export { llmClient }; // Exported for tests to configure mocks
 
-const realQuestionGenerator = new QuestionGenerator(llmClient);
+const realQuestionGenerator = new QuestionGenerator(llmClient, ragService);
 const realAnswerValidator = new TechnicalAccuracyChecker(llmClient);
 const realCandidateAnalyzer = new CandidateAnalyzer(llmClient);
 export const candidateProfileAnalyzer = new CandidateProfileAnalyzer(llmClient);
 export const candidateProfileAnalyzerService = new CandidateProfileAnalyzerService(candidateProfileAnalyzer);
 const realScoringEngine = new RubricEngine(llmClient);
-const realFollowUpGenerator = new FollowUpGenerator(llmClient);
+const realFollowUpGenerator = new FollowUpGenerator(llmClient, ragService);
 const realReportGenerator = new ReportGenerator(new ReportFormatter(), new ReportSummaryGenerator(), new RecommendationEngineAdapter());
 
 // Hiring Recommendation Engine (Feature 7)
@@ -173,13 +174,23 @@ export const sessionManager = {
 
 export const curriculumLoader = {
   loadCurriculum: async (roleId: string) => {
+    let curriculum: unknown;
     try {
       const data = await fs.readFile('d:/PROJECTS/curriculum.json', 'utf-8');
-      return JSON.parse(data);
+      curriculum = JSON.parse(data);
     } catch (e) {
       console.error('Failed to load external curriculum, falling back', e);
-      return await realCurriculumLoader.loadCurriculum('./src/data/curriculum/sample.json');
+      curriculum = await realCurriculumLoader.loadCurriculum('./src/data/curriculum/sample.json');
     }
+
+    // Initialize the RAG index with the loaded curriculum (non-blocking — failures degrade gracefully)
+    if (!ragService.isReady) {
+      ragService.initialize(curriculum).catch((err) =>
+        console.error('[RAG] Index initialization failed, RAG disabled for this session:', err)
+      );
+    }
+
+    return curriculum;
   }
 };
 

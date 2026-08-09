@@ -21,6 +21,11 @@ Requested Difficulty: {{DIFFICULTY}}
 # Interview History
 {{PREVIOUS_QUESTIONS}}
 
+# Curriculum Knowledge Base (RAG)
+The following are verified curriculum excerpts most relevant to the current topic.
+Use this grounded context to make questions specific, accurate, and curriculum-aligned:
+{{RAG_CONTEXT}}
+
 # Additional Context
 {{ADDITIONAL_CONTEXT}}
 

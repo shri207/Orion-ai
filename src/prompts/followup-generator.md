@@ -26,6 +26,12 @@ Difficulty: {{DIFFICULTY}}
 
 # Candidate Context
 {{CANDIDATE_CONTEXT}}
+
+# Curriculum Knowledge Base (RAG)
+The following are verified curriculum excerpts most relevant to this topic and the candidate's answer.
+Use these to identify specific knowledge gaps and craft a precise, curriculum-grounded follow-up:
+{{RAG_CONTEXT}}
+
 {{ADDITIONAL_CONTEXT}}
 
 # Follow-up Strategies

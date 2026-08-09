@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, useSpring, useTransform } from 'framer-motion';
 import { Sidebar } from '../components/Sidebar';
 import { useInterviewStore } from '../store/useInterviewStore';
-import { getReport, getPdfUrl, type ReportData } from '../services/report';
+import { getReport, type ReportData } from '../services/report';
 
 /* Animated SVG score ring */
 function ScoreRing({ score }: { score: number }) {
@@ -124,6 +124,337 @@ export default function ReportPage() {
       .catch(() => setReport(makePlaceholder(id)))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const printPdf = useCallback(() => {
+    if (!report) return;
+
+    const masteryLabel = (score: number) =>
+      score >= 85 ? 'Expert' : score >= 70 ? 'Proficient' : score >= 50 ? 'Developing' : 'Needs Work';
+    const masteryColor = (score: number) =>
+      score >= 85 ? '#34d399' : score >= 70 ? '#21F5D4' : score >= 50 ? '#fbbf24' : '#f87171';
+    const scoreBarColor = (score: number) =>
+      score >= 75 ? '#34d399' : score >= 55 ? '#fbbf24' : '#f87171';
+
+    const hiringTier = report.hiringRecommendation?.toLowerCase() || '';
+    const hiringBg =
+      hiringTier.includes('strong hire') ? '#065f46' :
+      (hiringTier.includes('hire') && !hiringTier.includes('no')) ? '#14532d' :
+      hiringTier.includes('maybe') ? '#78350f' :
+      hiringTier.includes('no hire') ? '#7f1d1d' : '#134e4a';
+    const hiringFg =
+      hiringTier.includes('strong hire') ? '#34d399' :
+      (hiringTier.includes('hire') && !hiringTier.includes('no')) ? '#4ade80' :
+      hiringTier.includes('maybe') ? '#fbbf24' :
+      hiringTier.includes('no hire') ? '#f87171' : '#21F5D4';
+
+    const conversation = report.conversation ?? [];
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Assessment Report — ${report.candidateName}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    background: #081615;
+    color: #F6F6F3;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* ── Layout ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 40px; }
+  .section {
+    background: rgba(11, 27, 26, 0.95);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    break-inside: avoid;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  /* ── Typography ── */
+  .display { font-size: 38px; font-weight: 300; letter-spacing: -1.5px; color: #21F5D4; line-height: 1.1; }
+  .headline { font-size: 18px; font-weight: 500; color: #F6F6F3; }
+  .label {
+    font-size: 9px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #9ca3af;
+  }
+  .label-teal { color: #21F5D4; }
+  .body-sm { font-size: 13px; color: #d1d5db; }
+  .muted { color: #6b7280; }
+
+  /* ── Header ── */
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+  .header-meta { font-size: 14px; color: #9ca3af; margin-top: 10px; }
+  .header-meta strong { color: #F6F6F3; }
+  .score-ring-wrap { text-align: center; }
+  .score-ring-num { font-size: 48px; font-weight: 300; color: #21F5D4; letter-spacing: -2px; }
+  .score-ring-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: #6b7280; margin-top: 4px; }
+  .hiring-badge {
+    display: inline-block; margin-top: 10px;
+    padding: 5px 16px; border-radius: 9999px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    background: ${hiringBg}; color: ${hiringFg};
+    border: 1px solid ${hiringFg}44;
+  }
+
+  /* ── Section titles ── */
+  .section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .section-title .icon { font-size: 18px; color: #21F5D4; }
+
+  /* ── Score bars ── */
+  .score-row { margin-bottom: 14px; }
+  .score-row-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .score-bar-track { height: 4px; background: rgba(255,255,255,0.08); border-radius: 9999px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 9999px; }
+  .mastery-pill {
+    font-size: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 1px 8px; border-radius: 9999px; margin-left: 6px;
+    border: 1px solid;
+  }
+
+  /* ── Lists ── */
+  ul.dot-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  ul.dot-list li { display: flex; gap: 10px; align-items: flex-start; }
+  ul.dot-list li .dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .dot-green { background: #21F5D4; }
+  .dot-red { background: #f87171; opacity: 0.7; }
+  .dot-teal { background: #21F5D4; opacity: 0.5; }
+
+  /* ── Divider ── */
+  .divider { width: 100%; height: 1px; background: rgba(255,255,255,0.07); margin: 20px 0; }
+
+  /* ── Q&A Log ── */
+  .qa-entry {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    break-inside: avoid;
+  }
+  .qa-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .qa-num { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.12em; }
+  .topic-chip {
+    background: rgba(33,245,212,0.08); border: 1px solid rgba(33,245,212,0.2);
+    color: #21F5D4; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 4px; margin-left: 8px;
+  }
+  .score-chip {
+    font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px; border: 1px solid;
+  }
+  .qa-question { font-size: 14px; font-weight: 500; color: #F6F6F3; margin-bottom: 10px; }
+  .answer-box { background: rgba(0,0,0,0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; }
+  .answer-box .answer-label { font-size: 9px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 4px; }
+  .answer-box .answer-text { font-size: 12px; color: rgba(246,246,243,0.85); line-height: 1.6; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .pill {
+    font-size: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 9999px; border: 1px solid;
+  }
+  .pill-green { background: rgba(52,211,153,0.08); color: #34d399; border-color: rgba(52,211,153,0.25); }
+  .pill-red   { background: rgba(248,113,113,0.08); color: #f87171; border-color: rgba(248,113,113,0.25); }
+
+  /* ── Hiring card ── */
+  .hiring-card {
+    background: ${hiringBg}22;
+    border: 1px solid ${hiringFg}33;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hiring-verdict {
+    font-size: 22px; font-weight: 600; color: ${hiringFg};
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #081615 !important; }
+    .no-print { display: none !important; }
+    .page { padding: 24px 28px; }
+    @page { size: A4; margin: 0; background: #081615; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="display">Technical Assessment<br/>Report</div>
+      <div class="header-meta" style="margin-top:14px;">
+        <strong>${report.candidateName}</strong> &nbsp;|&nbsp;
+        ${report.curriculum} &nbsp;|&nbsp; ${report.date}
+      </div>
+    </div>
+    <div class="score-ring-wrap">
+      <div class="score-ring-num">${Math.round(report.scores.overall)}</div>
+      <div class="score-ring-label">Overall Score</div>
+      <div class="hiring-badge">${report.hiringRecommendation}</div>
+    </div>
+  </div>
+
+  <!-- SCORE MATRIX + TOPIC BREAKDOWN -->
+  <div class="grid-2">
+    <!-- Score Matrix -->
+    <div class="section">
+      <div class="section-title">
+        <span class="headline">Score Matrix</span>
+      </div>
+      ${[
+        { label: 'Communication',   value: report.scores.communication },
+        { label: 'Technical Depth', value: report.scores.technicalDepth },
+        { label: 'Confidence',      value: report.scores.confidence },
+        { label: 'Problem Solving', value: report.scores.problemSolving },
+      ].map(s => `
+      <div class="score-row">
+        <div class="score-row-header">
+          <span class="body-sm">${s.label}</span>
+          <span style="color:#21F5D4;font-size:12px;">${s.value}%</span>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill" style="width:${s.value}%;background:#21F5D4;"></div>
+        </div>
+      </div>`).join('')}
+    </div>
+
+    <!-- Topic Breakdown -->
+    <div class="section">
+      <div class="section-title">
+        <span class="headline">Knowledge Assessment</span>
+      </div>
+      ${report.topicScores.length === 0
+        ? '<p class="muted body-sm">No topic data available.</p>'
+        : report.topicScores.map(ts => `
+      <div class="score-row">
+        <div class="score-row-header">
+          <div>
+            <span class="body-sm">${ts.topic}</span>
+            <span class="mastery-pill" style="color:${masteryColor(ts.score)};border-color:${masteryColor(ts.score)}44;">${masteryLabel(ts.score)}</span>
+          </div>
+          <span style="color:${masteryColor(ts.score)};font-size:12px;">${ts.score}%</span>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill" style="width:${ts.score}%;background:${masteryColor(ts.score)};"></div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <!-- STRENGTHS & AREAS TO PROBE -->
+  <div class="grid-2">
+    <div class="section">
+      <div class="section-title">
+        <span class="headline">Strengths</span>
+      </div>
+      <ul class="dot-list">
+        ${(report.strengths ?? []).map(s => `
+        <li><span class="dot dot-green"></span><span class="body-sm">${s}</span></li>`).join('')}
+      </ul>
+    </div>
+    <div class="section">
+      <div class="section-title">
+        <span class="headline">Areas to Probe</span>
+      </div>
+      <ul class="dot-list">
+        ${(report.improvements ?? []).map(s => `
+        <li><span class="dot dot-red"></span><span class="body-sm">${s}</span></li>`).join('')}
+      </ul>
+    </div>
+  </div>
+
+  <!-- AI SYNTHESIS -->
+  ${report.aiSynthesis ? `
+  <div class="section">
+    <div class="section-title"><span class="headline">AI Synthesis</span></div>
+    <p class="body-sm" style="color:#d1d5db;line-height:1.7;">${report.aiSynthesis}</p>
+  </div>` : ''}
+
+  <!-- HIRING DECISION -->
+  <div class="hiring-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px;">
+      <div>
+        <div class="label label-teal" style="margin-bottom:6px;">Hiring Recommendation</div>
+        <div class="hiring-verdict">${report.hiringRecommendation}</div>
+        ${report.hiringConfidence != null
+          ? `<div class="muted" style="font-size:10px;margin-top:4px;">${Math.round((report.hiringConfidence ?? 0) * 100)}% Confidence</div>`
+          : ''}
+      </div>
+    </div>
+    ${((report.hiringStrengths?.length ?? 0) > 0 || (report.hiringWeaknesses?.length ?? 0) > 0) ? `
+    <div class="grid-2" style="margin-bottom:16px;">
+      <div>
+        <div class="label" style="color:#34d399;margin-bottom:10px;">Hiring Strengths</div>
+        <ul class="dot-list">
+          ${(report.hiringStrengths ?? []).map(s => `<li><span class="dot" style="background:#34d399;"></span><span class="body-sm">${s}</span></li>`).join('')}
+        </ul>
+      </div>
+      <div>
+        <div class="label" style="color:#f87171;margin-bottom:10px;">Hiring Concerns</div>
+        <ul class="dot-list">
+          ${(report.hiringWeaknesses ?? []).map(w => `<li><span class="dot" style="background:#f87171;"></span><span class="body-sm">${w}</span></li>`).join('')}
+        </ul>
+      </div>
+    </div>` : ''}
+    ${(report.hiringReasoning?.length ?? 0) > 0 ? `
+    <div class="label" style="margin-bottom:8px;">Decision Reasoning</div>
+    <ul class="dot-list">
+      ${(report.hiringReasoning ?? []).map(r => `<li><span class="dot dot-teal"></span><span class="body-sm" style="font-style:italic;color:#9ca3af;">${r}</span></li>`).join('')}
+    </ul>` : ''}
+  </div>
+
+  <!-- FULL Q&A CONVERSATION -->
+  ${conversation.length > 0 ? `
+  <div class="section" style="margin-top:20px;">
+    <div class="section-title" style="margin-bottom:20px;">
+      <span class="headline">Interview Conversation</span>
+      <span class="label" style="margin-left:auto;">${conversation.length} Questions</span>
+    </div>
+    ${conversation.map(entry => {
+      const sc = entry.score >= 75 ? '#34d399' : entry.score >= 55 ? '#fbbf24' : '#f87171';
+      const scBg = entry.score >= 75 ? 'rgba(52,211,153,0.1)' : entry.score >= 55 ? 'rgba(251,191,36,0.1)' : 'rgba(248,113,113,0.1)';
+      return `
+    <div class="qa-entry">
+      <div class="qa-header">
+        <div>
+          <span class="qa-num">Q${entry.index}</span>
+          <span class="topic-chip">${entry.topic}</span>
+        </div>
+        ${entry.score > 0 ? `<span class="score-chip" style="color:${sc};border-color:${sc}44;background:${scBg};">Score: ${entry.score}%</span>` : ''}
+      </div>
+      <div class="qa-question">${entry.question}</div>
+      <div class="answer-box">
+        <div class="answer-label">Candidate Answer</div>
+        <div class="answer-text">${entry.answer || '<em style="color:#6b7280;">No answer recorded.</em>'}</div>
+      </div>
+      ${entry.analysis && ((entry.analysis.conceptsDetected?.length ?? 0) + (entry.analysis.knowledgeGaps?.length ?? 0)) > 0 ? `
+      <div class="pills">
+        ${(entry.analysis.conceptsDetected ?? []).slice(0,4).map(c => `<span class="pill pill-green">✓ ${c}</span>`).join('')}
+        ${(entry.analysis.knowledgeGaps ?? []).slice(0,3).map(g => `<span class="pill pill-red">✗ ${g}</span>`).join('')}
+      </div>` : ''}
+    </div>`;}).join('')}
+  </div>` : ''}
+
+</div>
+<script>window.onload = () => { window.print(); };<\/script>
+</body>
+</html>`;
+
+    const win = window.open('', '_blank', 'width=1000,height=800');
+    if (!win) { alert('Please allow pop-ups to export the PDF.'); return; }
+    win.document.write(html);
+    win.document.close();
+  }, [report]);
 
   if (loading) {
     return (
@@ -534,15 +865,13 @@ export default function ReportPage() {
 
           {/* ── ACTIONS ── */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href={getPdfUrl(id)}
-              target="_blank"
-              rel="noreferrer"
+            <button
+              onClick={printPdf}
               className="btn-primary rounded py-3 px-8"
             >
-              <span className="material-symbols-outlined text-[18px]">download</span>
-              Download PDF Report
-            </a>
+              <span className="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+              Export PDF Report
+            </button>
             <button
               onClick={() => navigate('/prepare')}
               className="btn-ghost rounded py-3 px-8"

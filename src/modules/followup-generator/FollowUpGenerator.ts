@@ -4,11 +4,15 @@ import { IFollowUpGenerator } from './FollowUpGeneratorInterfaces';
 import { IFollowUpGeneratorParams, IGeneratedFollowUp } from './FollowUpGeneratorTypes';
 import { FollowUpGeneratorValidator } from './FollowUpGeneratorValidator';
 import { ILLMClient, ILLMMessage } from '../../services/llm/LLMInterfaces';
+import { IRagService } from '../rag/RagTypes';
 import { logger } from '../../utils/logger';
 import { env } from '../../config/env';
 
 export class FollowUpGenerator implements IFollowUpGenerator {
-  constructor(private readonly llmClient: ILLMClient) {}
+  constructor(
+    private readonly llmClient: ILLMClient,
+    private readonly ragService?: IRagService
+  ) {}
 
   public async generateFollowUp(params: IFollowUpGeneratorParams): Promise<IGeneratedFollowUp> {
     const { 
@@ -26,8 +30,20 @@ export class FollowUpGenerator implements IFollowUpGenerator {
 
     logger.info({ topicId: topic.id, difficulty, interviewType }, 'Starting follow-up question generation');
 
+    // RAG: retrieve curriculum context using topic + a snippet of the candidate's answer
+    // This helps the LLM understand what related concepts the candidate *should* know
+    let ragContext = 'No additional curriculum context available.';
+    if (this.ragService?.isReady) {
+      // Use the first 300 chars of the answer as the semantic query so we retrieve
+      // curriculum chunks most relevant to what was (or wasn't) said
+      const ragQuery = `${topic.name} ${candidateAnswer.slice(0, 300)}`;
+      const ragResult = await this.ragService.retrieveContext(topic.id, ragQuery);
+      ragContext = ragResult.context;
+      logger.debug({ topicId: topic.id }, '[RAG] Context retrieved for follow-up generation');
+    }
+
     const promptTemplate = await this.loadPromptTemplate();
-    const systemPrompt = this.buildSystemPrompt(promptTemplate, params);
+    const systemPrompt = this.buildSystemPrompt(promptTemplate, params, ragContext);
 
     const messages: ILLMMessage[] = [
       { role: 'system', content: systemPrompt },
@@ -71,7 +87,7 @@ export class FollowUpGenerator implements IFollowUpGenerator {
     }
   }
 
-  private buildSystemPrompt(template: string, params: IFollowUpGeneratorParams): string {
+  private buildSystemPrompt(template: string, params: IFollowUpGeneratorParams, ragContext: string): string {
     const candidateContext = params.candidateProfile 
       ? `Experience: ${params.candidateProfile.yearsOfExperience} years. Summary: ${params.candidateProfile.resumeSummary}`
       : 'No candidate context provided.';
@@ -89,6 +105,7 @@ export class FollowUpGenerator implements IFollowUpGenerator {
       .replace('{{CANDIDATE_ANSWER}}', params.candidateAnswer)
       .replace('{{PREVIOUS_FOLLOW_UPS}}', previousQContext)
       .replace('{{CANDIDATE_CONTEXT}}', candidateContext)
+      .replace('{{RAG_CONTEXT}}', ragContext)
       .replace('{{ADDITIONAL_CONTEXT}}', params.additionalContext || 'None');
   }
 

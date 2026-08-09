@@ -12,6 +12,8 @@ interface Env {
   QUESTION_TEMPERATURE: number;
   MAX_FOLLOWUPS_PER_TOPIC: number;
   MAX_FOLLOWUPS_PER_INTERVIEW: number;
+  /** Number of curriculum chunks to retrieve per RAG query (default: 3) */
+  RAG_TOP_K: number;
 }
 
 export const env: Env = {
@@ -24,4 +26,5 @@ export const env: Env = {
   QUESTION_TEMPERATURE: process.env.QUESTION_TEMPERATURE ? parseFloat(process.env.QUESTION_TEMPERATURE) : 0.7,
   MAX_FOLLOWUPS_PER_TOPIC: process.env.MAX_FOLLOWUPS_PER_TOPIC ? parseInt(process.env.MAX_FOLLOWUPS_PER_TOPIC, 10) : 3,
   MAX_FOLLOWUPS_PER_INTERVIEW: process.env.MAX_FOLLOWUPS_PER_INTERVIEW ? parseInt(process.env.MAX_FOLLOWUPS_PER_INTERVIEW, 10) : 10,
+  RAG_TOP_K: process.env.RAG_TOP_K ? parseInt(process.env.RAG_TOP_K, 10) : 3,
 };
