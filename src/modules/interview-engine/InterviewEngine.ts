@@ -119,7 +119,8 @@ export class InterviewEngine {
           state.currentQuestion ?? '',
           answer,
           score,
-          analysis
+          analysis,
+          sessionId  // pass sessionId so per-session logs don't bleed into each other
         );
       }
 
@@ -128,9 +129,9 @@ export class InterviewEngine {
       const rawNeedsFollowUp = !timedOut && this.deps.followUpGenerator.needsFollowUp(analysis);
       const needsFollowUp = rawNeedsFollowUp && (state.followUpCount ?? 0) < 1;
 
-      // ── Topic pacing: advance after 1 main question on the same topic ─────
-      // This ensures the interview covers at least 5 topics within 10 questions.
-      const QUESTIONS_PER_TOPIC = 1;
+      // ── Topic pacing: advance after 2 questions on the same topic ─────────
+      // 2 questions per topic × 4 topics = 8 main questions + up to 4 follow-ups = ~12 total.
+      const QUESTIONS_PER_TOPIC = 2;
       const shouldAdvanceTopic = !needsFollowUp &&
         (state.questionsOnCurrentTopic >= QUESTIONS_PER_TOPIC || timedOut);
 
@@ -192,10 +193,10 @@ export class InterviewEngine {
 
     // ── Minimum topic coverage guardrail ──────────────────────────────────────
     // The interview must cover at least MIN_TOPICS distinct topics.
-    // If the global question count has reached 10 but fewer than MIN_TOPICS topics
-    // have been completed, we continue asking (up to MAX_QUESTIONS) rather than ending.
-    const MIN_TOPICS = 5;
-    const MAX_QUESTIONS = 15;
+    // If the global question count has reached MAX_QUESTIONS but fewer than MIN_TOPICS
+    // topics have been completed, we continue asking rather than ending early.
+    const MIN_TOPICS = 4;
+    const MAX_QUESTIONS = 20;
 
     try {
       // ── Topic pacing: only fetch a new topic when questionsOnCurrentTopic was reset to 0

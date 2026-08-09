@@ -389,20 +389,28 @@ export const followUpGenerator = {
 };
 
 export const reportGenerator = {
-  // Per-question log: {topic, question, answer, score, analysis}
-  _questionLog: [] as Array<{topic: string; question: string; answer: string; score: number; analysis: any}>,
+  // Per-session question log, keyed by sessionId to avoid cross-session pollution
+  _sessionLogs: new Map<string, Array<{topic: string; question: string; answer: string; score: number; analysis: any}>>(),
 
-  recordQuestion(topic: string, question: string, answer: string, score: number, analysis: any) {
-    this._questionLog.push({ topic, question, answer, score, analysis });
+  recordQuestion(topic: string, question: string, answer: string, score: number, analysis: any, sessionId?: string) {
+    const key = sessionId ?? '__default';
+    if (!this._sessionLogs.has(key)) this._sessionLogs.set(key, []);
+    this._sessionLogs.get(key)!.push({ topic, question, answer, score, analysis });
   },
 
   generateReport: async (sessionId: string, interviewId: string, history: any[]) => {
+    // Pull this session's log and immediately clean it up
+    const questionLog = reportGenerator._sessionLogs.get(sessionId) ?? [];
+    reportGenerator._sessionLogs.delete(sessionId);
+
     // Build per-topic score summary from the logged questions
-    const topicMap = new Map<string, { scores: number[]; strengths: string[]; gaps: string[] }>();
-    reportGenerator._questionLog.forEach(entry => {
-      if (!topicMap.has(entry.topic)) topicMap.set(entry.topic, { scores: [], strengths: [], gaps: [] });
+    const topicMap = new Map<string, { scores: number[]; strengths: string[]; gaps: string[]; confidences: number[] }>();
+    questionLog.forEach(entry => {
+      if (!topicMap.has(entry.topic)) topicMap.set(entry.topic, { scores: [], strengths: [], gaps: [], confidences: [] });
       const t = topicMap.get(entry.topic)!;
       t.scores.push(entry.score);
+      // Collect confidence signals from individual answers
+      if (typeof entry.analysis?.confidence === 'number') t.confidences.push(entry.analysis.confidence);
       // Collect strengths from concepts_detected that were mentioned
       (entry.analysis?.concepts_detected ?? []).forEach((c: any) => {
         if (c.mentioned && c.name) t.strengths.push(c.name);
@@ -412,9 +420,17 @@ export const reportGenerator = {
       (entry.analysis?.missing_concepts ?? []).forEach((g: string) => t.gaps.push(g));
     });
 
-    const overallScore = reportGenerator._questionLog.length > 0
-      ? reportGenerator._questionLog.reduce((s, e) => s + e.score, 0) / reportGenerator._questionLog.length
+    const overallScore = questionLog.length > 0
+      ? questionLog.reduce((s, e) => s + e.score, 0) / questionLog.length
       : 0;
+
+    // Compute a real confidence score from the LLM analysis outputs (independent of overall score)
+    const allConfidences = questionLog
+      .map(e => typeof e.analysis?.confidence === 'number' ? e.analysis.confidence : null)
+      .filter((c): c is number => c !== null);
+    const confidenceScore = allConfidences.length > 0
+      ? Math.round(allConfidences.reduce((a, b) => a + b, 0) / allConfidences.length)
+      : Math.round(overallScore * 0.9); // fallback if LLM didn't return confidence
 
     // Build topSkills / areasForImprovement for the summary generator
     const topSkills: any[] = [];
@@ -443,13 +459,13 @@ export const reportGenerator = {
     });
 
     // Build question history with topic tags for the formatter
-    const taggedHistory = reportGenerator._questionLog.map((e, i) => ({
+    const taggedHistory = questionLog.map((e, i) => ({
       id: `q${i}`,
       topic: e.topic,
       question: e.question,
       answer: e.answer,
     }));
-    const taggedEvaluations = reportGenerator._questionLog.map((e, i) => ({
+    const taggedEvaluations = questionLog.map((e, i) => ({
       questionId: `q${i}`,
       score: e.score,
       accuracy: e.analysis?.technical_accuracy ?? e.score,
@@ -466,7 +482,7 @@ export const reportGenerator = {
         technical: overallScore,
         problemSolving: overallScore * 0.95,
         communication: overallScore * 0.9,
-        confidence: overallScore * 1.0,
+        confidence: confidenceScore,
       },
       skillMatrix: { topSkills, areasForImprovement },
       communicationMetrics: { overallScore: overallScore * 0.9 } as unknown as ICommunicationAnalyzerResult,
@@ -480,7 +496,7 @@ export const reportGenerator = {
       questionsAsked: data.scores.length,
     }));
 
-    const conversation = reportGenerator._questionLog.map((e, i) => ({
+    const conversation = questionLog.map((e, i) => ({
       index:    i + 1,
       topic:    e.topic,
       question: e.question,
@@ -501,12 +517,10 @@ export const reportGenerator = {
       overall:       Math.round(overallScore),
       technicalDepth: Math.round(overallScore * 0.95),
       communication:  Math.round(overallScore * 0.9),
-      confidence:     Math.round(overallScore * 1.0),
+      confidence:     confidenceScore,
       problemSolving: Math.round(overallScore * 0.95),
     };
 
-    // Clear the log for next session
-    reportGenerator._questionLog = [];
     return result;
   }
 };
