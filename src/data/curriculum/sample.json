@@ -4,36 +4,30 @@
     {
       "id": "node-js-basics",
       "name": "Node.js Basics",
-      "description": "Core concepts of Node.js",
+      "description": "Core concepts of Node.js runtime",
       "topics": [
         {
           "id": "event-loop",
           "name": "The Event Loop",
-          "description": "Understanding the Node.js event loop and asynchronous programming.",
+          "description": "Understanding the Node.js event loop, call stack, and asynchronous programming model.",
           "subtopics": [
-            {
-              "id": "phases",
-              "name": "Event Loop Phases",
-              "learningObjectives": [
-                "Explain the different phases of the event loop",
-                "Understand nextTick vs setImmediate"
-              ]
-            }
+            { "id": "phases", "name": "Event Loop Phases", "learningObjectives": ["Explain the different phases of the event loop", "Understand nextTick vs setImmediate"] }
           ]
         },
         {
           "id": "streams",
           "name": "Streams and Buffers",
-          "description": "Working with binary data and streams.",
+          "description": "Working with binary data, streams, and efficient I/O in Node.js.",
           "subtopics": [
-            {
-              "id": "readable-streams",
-              "name": "Readable Streams",
-              "learningObjectives": [
-                "Understand how to consume readable streams",
-                "Pipe streams for efficient data handling"
-              ]
-            }
+            { "id": "readable-streams", "name": "Readable Streams", "learningObjectives": ["Understand how to consume readable streams", "Pipe streams for efficient data handling"] }
+          ]
+        },
+        {
+          "id": "modules",
+          "name": "CommonJS and ES Modules",
+          "description": "Module systems in Node.js including require, exports, import/export, and module resolution.",
+          "subtopics": [
+            { "id": "module-caching", "name": "Module Caching", "learningObjectives": ["Explain how Node.js caches modules", "Understand circular dependency resolution"] }
           ]
         }
       ]
@@ -41,21 +35,45 @@
     {
       "id": "express-js",
       "name": "Express.js Fundamentals",
-      "description": "Building web applications with Express.",
+      "description": "Building RESTful web applications with Express.js.",
       "topics": [
         {
           "id": "middleware",
           "name": "Middleware Patterns",
-          "description": "How middleware functions work in Express.",
+          "description": "How middleware functions work in Express — request/response pipeline, error handling, and chaining.",
           "subtopics": [
-            {
-              "id": "error-handling",
-              "name": "Error Handling Middleware",
-              "learningObjectives": [
-                "Create a custom error handling middleware",
-                "Understand the order of middleware execution"
-              ]
-            }
+            { "id": "error-handling", "name": "Error Handling Middleware", "learningObjectives": ["Create a custom error handling middleware", "Understand the order of middleware execution"] }
+          ]
+        },
+        {
+          "id": "routing",
+          "name": "Routing and REST",
+          "description": "Designing RESTful APIs with Express Router, route parameters, query strings, and HTTP verbs.",
+          "subtopics": [
+            { "id": "route-params", "name": "Route Parameters", "learningObjectives": ["Use route params and query strings", "Implement CRUD endpoints"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "databases",
+      "name": "Database Integration",
+      "description": "Connecting Node.js applications to SQL and NoSQL databases.",
+      "topics": [
+        {
+          "id": "sql-basics",
+          "name": "SQL & ORMs",
+          "description": "Working with PostgreSQL and ORMs like Prisma or Sequelize — queries, migrations, and relations.",
+          "subtopics": [
+            { "id": "migrations", "name": "Database Migrations", "learningObjectives": ["Create and run migrations", "Understand schema versioning"] }
+          ]
+        },
+        {
+          "id": "nosql",
+          "name": "NoSQL and Caching",
+          "description": "Using Redis for caching and session storage, and MongoDB for document storage.",
+          "subtopics": [
+            { "id": "redis-patterns", "name": "Redis Patterns", "learningObjectives": ["Use Redis for caching API responses", "Implement pub/sub patterns"] }
           ]
         }
       ]

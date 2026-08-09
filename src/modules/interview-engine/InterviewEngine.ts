@@ -104,7 +104,7 @@ export class InterviewEngine {
           // Return the same question so the frontend can show an error without wiping the chat
           return { completed: false, nextQuestion: state.currentQuestion ?? undefined };
         }
-        analysis = await this.deps.candidateAnalyzer.analyze(processedAnswer, state.expectedConcepts);
+        analysis = await this.deps.candidateAnalyzer.analyze(processedAnswer, state.expectedConcepts, state.currentQuestion ?? undefined);
         score = await this.deps.scoringEngine.score(analysis);
       }
 

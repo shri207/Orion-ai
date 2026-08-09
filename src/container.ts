@@ -337,8 +337,14 @@ export const answerValidator = {
 };
 
 export const candidateAnalyzer = {
-  analyze: async (answer: string, expectedConcepts: string[]) => {
-    const res = await realCandidateAnalyzer.analyzeAnswer({ candidateAnswer: answer, expectedConcepts, question: '' } as unknown as ICandidateAnalyzerParams);
+  analyze: async (answer: string, expectedConcepts: string[], question?: string) => {
+    const res = await realCandidateAnalyzer.analyzeAnswer({
+      interviewQuestion: question ?? '',
+      candidateAnswer:   answer,
+      topicMetadata:     question ?? '',
+      difficulty:        'Medium' as InterviewDifficulty,
+      expectedConcepts,
+    } as unknown as ICandidateAnalyzerParams);
     return res;
   }
 };
@@ -545,9 +551,9 @@ export const contextManager = {
 export const adaptiveDifficulty = {
   /**
    * Calculates the next question difficulty based on:
-   *  1. Speed   — how fast (ms) the candidate answered (faster = potentially escalate)
-   *  2. Ease    — the LLM-derived confidence score (high confidence = potentially escalate)
-   *  3. Score   — rolling average score across all questions (primary fallback)
+   *  1. Confidence — high confidence → harder (escalate), low confidence → easier (de-escalate)
+   *  2. Score      — rolling average score across all questions (primary fallback)
+   *  3. Speed      — fast answer with high score → escalate
    *
    * Difficulty levels: easy → medium → hard → expert
    */
@@ -568,28 +574,32 @@ export const adaptiveDifficulty = {
 
     let currentIdx = LEVELS.indexOf(scoreLevel);
 
-    // ── Speed signal ────────────────────────────────────────────────────────
-    // Fast answers (< 30 s) suggest the question was easy → escalate
-    // Slow answers (> 120 s) suggest the question was hard → de-escalate
-    const FAST_MS  = 30_000;  // 30 seconds
-    const SLOW_MS  = 120_000; // 2 minutes
-
-    if (opts?.timeTakenMs !== undefined) {
-      if (opts.timeTakenMs < FAST_MS)  currentIdx = Math.min(LEVELS.length - 1, currentIdx + 1);
-      if (opts.timeTakenMs > SLOW_MS)  currentIdx = Math.max(0, currentIdx - 1);
+    // ── Confidence signal (PRIMARY) ──────────────────────────────────────────
+    // HIGH confidence (>= 70): candidate is comfortable → escalate to harder question
+    // LOW confidence (<= 40):  candidate is struggling → de-escalate to easier question
+    if (opts?.confidenceScore !== undefined) {
+      const { confidenceScore } = opts;
+      if (confidenceScore >= 70) {
+        // Strong performer: push harder by 1 level
+        currentIdx = Math.min(LEVELS.length - 1, currentIdx + 1);
+        console.log(`[AdaptiveDifficulty] HIGH confidence (${confidenceScore}) → escalating difficulty`);
+      } else if (confidenceScore <= 40) {
+        // Struggling: de-escalate by 1 level
+        currentIdx = Math.max(0, currentIdx - 1);
+        console.log(`[AdaptiveDifficulty] LOW confidence (${confidenceScore}) → de-escalating difficulty`);
+      }
     }
 
-    // ── Confidence signal ────────────────────────────────────────────────────
-    // High confidence (> 80) with a fast answer is a strong escalation signal
-    // Low confidence (< 40) with a slow answer is a strong de-escalation signal
-    if (opts?.confidenceScore !== undefined) {
-      const { confidenceScore, timeTakenMs } = opts;
-      if (confidenceScore > 80 && (timeTakenMs === undefined || timeTakenMs < FAST_MS)) {
+    // ── Speed signal (SECONDARY tie-breaker) ────────────────────────────────
+    // Fast answers (< 20s) with already-high score = further escalate
+    // Very slow answers (> 150s) = further de-escalate
+    const FAST_MS = 20_000;   // 20 seconds
+    const SLOW_MS = 150_000;  // 2.5 minutes
+    if (opts?.timeTakenMs !== undefined) {
+      if (opts.timeTakenMs < FAST_MS && currentScore >= 70)
         currentIdx = Math.min(LEVELS.length - 1, currentIdx + 1);
-      }
-      if (confidenceScore < 40 && (timeTakenMs === undefined || timeTakenMs > SLOW_MS)) {
+      if (opts.timeTakenMs > SLOW_MS)
         currentIdx = Math.max(0, currentIdx - 1);
-      }
     }
 
     const next = LEVELS[currentIdx];

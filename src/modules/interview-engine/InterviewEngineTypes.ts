@@ -25,7 +25,7 @@ export interface IInterviewEngineDependencies {
   };
   
   candidateAnalyzer: {
-    analyze(answer: string, expectedConcepts: string[]): Promise<any>;
+    analyze(answer: string, expectedConcepts: string[], question?: string): Promise<any>;
   };
   
   scoringEngine: {
