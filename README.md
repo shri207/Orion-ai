@@ -1,5 +1,7 @@
 # Orion AI
-
+<div align="center">
+  <img src="./demo/logo.png" alt="Orion AI Logo" width="200" />
+</div>
 Orion AI is a cutting-edge, AI-powered technical interviewer platform. It conducts adaptive, real-time technical interviews tailored to specific curriculums, evaluates candidates across multiple dimensions (technical depth, communication, problem-solving, and confidence), and generates comprehensive assessment reports and hiring recommendations.
 
 ## Screenshots
