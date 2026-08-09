@@ -2,6 +2,20 @@
 
 Orion AI is a cutting-edge, AI-powered technical interviewer platform. It conducts adaptive, real-time technical interviews tailored to specific curriculums, evaluates candidates across multiple dimensions (technical depth, communication, problem-solving, and confidence), and generates comprehensive assessment reports and hiring recommendations.
 
+## Screenshots
+
+<div align="center">
+  <img src="./demo/Landing%20Page.png" alt="Landing Page" width="800" />
+  <br />
+  <img src="./demo/Dashboard.png" alt="Dashboard" width="800" />
+  <br />
+  <img src="./demo/Interview-page.png" alt="Interview Page" width="800" />
+  <br />
+  <img src="./demo/Chat-{age.png" alt="Chat Page" width="800" />
+  <br />
+  <img src="./demo/Report%20For%20Candidate.png" alt="Report For Candidate" width="800" />
+</div>
+
 ## Features
 
 - 🤖 **Adaptive AI Interviewer**: Leverages OpenRouter and advanced LLMs to conduct dynamic, conversational interviews that adapt in difficulty based on the candidate's performance.
