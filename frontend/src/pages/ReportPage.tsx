@@ -132,8 +132,6 @@ export default function ReportPage() {
       score >= 85 ? 'Expert' : score >= 70 ? 'Proficient' : score >= 50 ? 'Developing' : 'Needs Work';
     const masteryColor = (score: number) =>
       score >= 85 ? '#34d399' : score >= 70 ? '#21F5D4' : score >= 50 ? '#fbbf24' : '#f87171';
-    const scoreBarColor = (score: number) =>
-      score >= 75 ? '#34d399' : score >= 55 ? '#fbbf24' : '#f87171';
 
     const hiringTier = report.hiringRecommendation?.toLowerCase() || '';
     const hiringBg =
