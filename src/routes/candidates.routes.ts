@@ -3,7 +3,8 @@ import fs from 'fs/promises';
 
 const router = Router();
 
-const CANDIDATES_FILE = 'D:/PROJECTS/candidates.json';
+import path from 'path';
+const CANDIDATES_FILE = path.join(process.cwd(), 'frontend', 'src', 'data', 'candidates.json');
 
 /** Map a job role string to a Material Symbol icon name */
 function roleToIcon(jobRole: string): string {
