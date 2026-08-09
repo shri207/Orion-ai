@@ -1,0 +1,507 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Interview Agent - The Cinematic AI Era</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=EB+Garamond:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed-variant": "#574500",
+                    "surface-tint": "#00dfc0",
+                    "tertiary-fixed-dim": "#e9c341",
+                    "surface-container-low": "#101e1d",
+                    "surface": "#081615",
+                    "on-surface-variant": "#b9cac4",
+                    "on-primary": "#00382f",
+                    "surface-container-lowest": "#041010",
+                    "on-error": "#690005",
+                    "inverse-on-surface": "#253332",
+                    "secondary-fixed-dim": "#31dec3",
+                    "surface-container": "#142221",
+                    "outline-variant": "#3a4a46",
+                    "background": "#081615",
+                    "outline": "#84948f",
+                    "surface-bright": "#2e3c3b",
+                    "border-glass": "rgba(255, 255, 255, 0.06)",
+                    "secondary": "#44e9ce",
+                    "secondary-fixed": "#5bfbdf",
+                    "on-tertiary-fixed": "#231b00",
+                    "on-primary-fixed-variant": "#005144",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#00dfc0",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed-variant": "#005045",
+                    "primary-container": "#21f5d4",
+                    "primary-fixed": "#34fddc",
+                    "tertiary-container": "#ffd754",
+                    "on-tertiary": "#3c2f00",
+                    "on-primary-container": "#006c5c",
+                    "surface-container-high": "#1f2d2b",
+                    "on-secondary": "#00382f",
+                    "surface-variant": "#293736",
+                    "surface-dim": "#081615",
+                    "tertiary-fixed": "#ffe084",
+                    "primary": "#dafff4",
+                    "surface-card": "#0B1B1A",
+                    "text-primary": "#F6F6F3",
+                    "on-primary-fixed": "#00201a",
+                    "on-background": "#d6e6e3",
+                    "tertiary": "#fff6e7",
+                    "surface-container-highest": "#293736",
+                    "surface-elevated": "#102322",
+                    "secondary-container": "#00cdb3",
+                    "on-secondary-container": "#005146",
+                    "inverse-surface": "#d6e6e3",
+                    "on-tertiary-container": "#745d00",
+                    "on-error-container": "#ffdad6",
+                    "glow-teal": "rgba(33, 245, 212, 0.15)",
+                    "inverse-primary": "#006b5b",
+                    "on-surface": "#d6e6e3",
+                    "on-secondary-fixed": "#00201b",
+                    "text-muted": "#8CA5A1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "32px",
+                    "margin-mobile": "24px",
+                    "margin-desktop": "80px",
+                    "container-max": "1440px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "EB Garamond"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "display-lg-mobile": [
+                            "EB Garamond"
+                    ],
+                    "headline-lg": [
+                            "EB Garamond"
+                    ],
+                    "headline-xl": [
+                            "EB Garamond"
+                    ]
+            },
+            "fontSize": {
+                    "label-md": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "84px",
+                            {
+                                    "lineHeight": "92px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg-mobile": [
+                            "48px",
+                            {
+                                    "lineHeight": "52px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "40px",
+                            {
+                                    "lineHeight": "48px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-xl": [
+                            "60px",
+                            {
+                                    "lineHeight": "68px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.text-primary');
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        .spotlight {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, theme('colors.glow-teal') 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .glass-panel {
+            background-color: theme('colors.surface-card');
+            backdrop-filter: blur(20px);
+            border: 1px solid theme('colors.border-glass');
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-particle {
+            position: absolute;
+            background-color: theme('colors.primary-container');
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative">
+<div class="grain-overlay"></div>
+<!-- Background Shader -->
+<!-- STITCH_SHADER_START:ANIMATION_5 class="absolute inset-0 w-full h-full -z-20" -->
+<div class="absolute inset-0 w-full h-full -z-20" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_5" style="display:block;width:100%;height:100%" width="1363" height="1359"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_5');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+    
+    // Deep emerald background
+    vec3 color = vec3(0.027, 0.082, 0.078); 
+    
+    // Soft flowing gradients
+    float pulse = sin(u_time * 0.2) * 0.5 + 0.5;
+    float dist = distance(uv, vec2(0.5, 0.7));
+    color += vec3(0.129, 0.961, 0.831) * (1.0 - smoothstep(0.0, 0.8, dist)) * 0.15 * pulse;
+    
+    // Secondary light streak
+    float streak = sin(uv.x * 2.0 + uv.y * 1.5 + u_time * 0.5) * 0.5 + 0.5;
+    color += vec3(0.3, 0.94, 0.83) * streak * 0.05;
+    
+    // Subtle film grain
+    float noise = fract(sin(dot(uv, vec2(12.9898, 78.233) + u_time)) * 43758.5453);
+    color += noise * 0.02;
+
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_5 -->
+<!-- 3D Scene Mid-ground -->
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="absolute inset-0 w-full h-full -z-10 opacity-70" -->
+<div class="absolute inset-0 w-full h-full -z-10 opacity-70" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+container.appendChild(renderer.domElement);
+
+const group = new THREE.Group();
+scene.add(group);
+
+const topics = ["Prompt Engineering", "RAG", "Vector DB", "MCP", "Deployment"];
+const cards = [];
+
+const geometry = new THREE.PlaneGeometry(3, 4);
+const materialBase = {
+    transparent: true,
+    opacity: 0.15,
+    side: THREE.DoubleSide
+};
+
+topics.forEach((text, i) => {
+    const material = new THREE.MeshPhongMaterial({
+        ...materialBase,
+        color: 0x21F5D4,
+        shininess: 100,
+        specular: 0x21F5D4
+    });
+    const card = new THREE.Mesh(geometry, material);
+    
+    const angle = (i / topics.length) * Math.PI * 2;
+    const radius = 10;
+    card.position.set(Math.cos(angle) * radius, Math.sin(angle) * 2, Math.sin(angle) * radius);
+    card.lookAt(0, 0, 0);
+    
+    group.add(card);
+    cards.push(card);
+});
+
+const light = new THREE.PointLight(0x21F5D4, 2, 50);
+light.position.set(0, 5, 5);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0x404040));
+
+camera.position.z = 20;
+
+function animate() {
+    requestAnimationFrame(animate);
+    group.rotation.y += 0.002;
+    cards.forEach((card, i) => {
+        card.rotation.x = Math.sin(Date.now() * 0.001 + i) * 0.1;
+    });
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const width = container.clientWidth || window.innerWidth;
+    const height = container.clientHeight || window.innerHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+});
+
+animate();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-border-glass shadow-none transition-all duration-400 ease-in-out">
+<div class="flex justify-between items-center px-margin-desktop py-6 max-w-container-max mx-auto">
+<div class="font-headline-lg text-headline-lg text-primary tracking-tighter">
+                Interview Agent
+            </div>
+<div class="hidden md:flex gap-8 font-label-md text-label-md uppercase tracking-widest">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-400 hover:text-secondary hover:bg-white/5 px-3 py-1 rounded" href="#">Features</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-400 hover:text-secondary hover:bg-white/5 px-3 py-1 rounded" href="#">How It Works</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-400 hover:text-secondary hover:bg-white/5 px-3 py-1 rounded" href="#">Demo</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-400 hover:text-secondary hover:bg-white/5 px-3 py-1 rounded" href="#">GitHub</a>
+</div>
+<div class="flex items-center">
+<button class="font-label-md text-label-md uppercase tracking-widest text-secondary hover:text-primary transition-colors duration-400 hover:bg-white/5 px-4 py-2 rounded border border-border-glass">
+                    Sign In
+                </button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<main class="flex-grow flex flex-col justify-center items-center relative z-20 px-margin-mobile md:px-margin-desktop mt-32 md:mt-0 min-h-screen">
+<div class="spotlight"></div>
+<div class="text-center mb-12 relative z-30">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-tighter mb-4 drop-shadow-2xl">
+                The Interview Agent
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Build the interviewer, not the interview.
+            </p>
+</div>
+<div class="glass-panel rounded-xl p-8 md:p-12 max-w-3xl w-full flex flex-col items-center gap-8 relative z-30 transform transition-transform duration-500 hover:scale-[1.02]">
+<div class="w-full h-48 bg-surface-container-low/50 rounded-lg border border-border-glass mb-4 flex items-center justify-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-glow-teal opacity-0 group-hover:opacity-20 transition-opacity duration-700 blur-2xl"></div>
+<img class="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen" data-alt="A highly abstract, futuristic representation of an AI node network, pulsing with neon teal light against a deep emerald black background. The image should evoke a sense of advanced intelligence and seamless data processing, matching a premium, cinematic dark mode UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBklO72fmSB16DS3F2YlFdJEvfnxLB_roRbj4KAy5bV9E8zASw2CJsA1xt-uvEU4A1cF2WeoV7SQDZH3OhUx5VKQ89rG58BER_OIIqYnvA5IF0OWX1c7A4gPwJRUIEg1ySEEEegfQXk5yJYgVgVXIcTgpc5Nxl8ANxhCUJM6sDJkvvYG2QuQ_I0ga35XzJlO-Mm3SPaO65dUUXD6sJWSNMv1cE3bT5Omyb8ALqdqiiI1x26SqF2AG81qQ">
+<span class="material-symbols-outlined text-primary text-6xl opacity-80 group-hover:scale-110 transition-transform duration-500">memory</span>
+</div>
+<div class="flex flex-col md:flex-row gap-6 w-full justify-center items-center">
+<button class="w-full md:w-auto bg-primary-container text-on-primary-container font-label-md text-label-md uppercase tracking-widest py-4 px-8 rounded-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] hover:bg-primary transition-colors duration-300 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+                    Start Interview
+                </button>
+<button class="w-full md:w-auto bg-transparent border border-border-glass text-secondary font-label-md text-label-md uppercase tracking-widest py-4 px-8 rounded-full hover:bg-white/5 transition-colors duration-300 flex items-center justify-center gap-2 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+                    Upload Candidate Profile
+                </button>
+</div>
+<a class="font-body-md text-body-md text-text-muted hover:text-secondary transition-colors duration-300 underline decoration-border-glass underline-offset-4 hover:decoration-secondary" href="#">
+                Browse Curriculum
+            </a>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-on-surface-variant flex flex-col items-center gap-2 scroll-indicator">
+<span class="font-label-md text-label-md uppercase tracking-widest text-[10px] opacity-70">Discover</span>
+<span class="material-symbols-outlined opacity-70">expand_more</span>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full py-16 border-t border-border-glass transition-opacity duration-300 relative z-20">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="font-headline-lg text-headline-lg text-primary">
+                Interview Agent
+            </div>
+<div class="flex flex-wrap justify-center gap-6 font-body-md text-body-md">
+<a class="text-text-muted hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="text-text-muted hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="text-text-muted hover:text-secondary transition-colors" href="#">Contact</a>
+<a class="text-text-muted hover:text-secondary transition-colors" href="#">Status</a>
+</div>
+<div class="text-text-muted font-body-md text-body-md text-center md:text-right text-sm">
+                © 2024 Interview Agent. Engineered for the cinematic AI era.
+            </div>
+</div>
+</footer>
+<script>
+        // Simple particle generator for atmosphere
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.body;
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('floating-particle');
+                
+                // Randomize size, position, and duration
+                const size = Math.random() * 4 + 1;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}vw`;
+                particle.style.bottom = `-10px`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(particle);
+            }
+        });
+    </script>
+</body></html>

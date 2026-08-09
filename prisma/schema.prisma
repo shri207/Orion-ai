@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String      @id @default(uuid())
+  name       String
+  email      String      @unique
+  candidates Candidate[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Candidate {
+  id              String      @id @default(uuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  role            String
+  experienceLevel String
+  interviews      Interview[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Interview {
+  id                   String     @id @default(uuid())
+  candidateId          String
+  candidate            Candidate  @relation(fields: [candidateId], references: [id])
+  status               String
+  currentQuestionIndex Int        @default(0)
+  currentTopic         String?
+  difficulty           String?
+  startedAt            DateTime?
+  endedAt              DateTime?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  
+  questions            Question[]
+  answers              Answer[]
+  scores               Score[]
+  reports              Report[]
+  sessions             Session[]
+  analytics            Analytics[]
+
+  @@index([candidateId])
+  @@index([status])
+  @@index([startedAt])
+}
+
+model Question {
+  id          String     @id @default(uuid())
+  interviewId String
+  interview   Interview  @relation(fields: [interviewId], references: [id])
+  topic       String
+  difficulty  String
+  question    String
+  order       Int
+  createdAt   DateTime   @default(now())
+  
+  answers     Answer[]
+  scores      Score[]
+
+  @@index([interviewId])
+}
+
+model Answer {
+  id          String    @id @default(uuid())
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id])
+  questionId  String
+  question    Question  @relation(fields: [questionId], references: [id])
+  answer      String
+  latency     Int?
+  tokensUsed  Int?
+  submittedAt DateTime  @default(now())
+  
+  score       Score?
+
+  @@index([interviewId])
+  @@index([questionId])
+}
+
+model Score {
+  id          String    @id @default(uuid())
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id])
+  questionId  String
+  question    Question  @relation(fields: [questionId], references: [id])
+  answerId    String    @unique
+  answer      Answer    @relation(fields: [answerId], references: [id])
+  score       Float
+  feedback    String
+  rubric      String?
+  createdAt   DateTime  @default(now())
+
+  @@index([interviewId])
+}
+
+model Report {
+  id              String    @id @default(uuid())
+  interviewId     String
+  interview       Interview @relation(fields: [interviewId], references: [id])
+  summary         String
+  strengths       Json
+  weaknesses      Json
+  recommendations Json
+  overallScore    Float
+  generatedAt     DateTime  @default(now())
+
+  @@index([interviewId])
+}
+
+model Session {
+  id          String    @id @default(uuid())
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id])
+  socketId    String
+  expiresAt   DateTime
+
+  @@index([interviewId])
+}
+
+model Analytics {
+  id          String    @id @default(uuid())
+  interviewId String
+  interview   Interview @relation(fields: [interviewId], references: [id])
+  metric      String
+  value       Float
+  createdAt   DateTime  @default(now())
+
+  @@index([interviewId])
+}

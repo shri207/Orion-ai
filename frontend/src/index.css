@@ -1,0 +1,502 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   BASE — 60fps GPU-composited foundation
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+* { -webkit-tap-highlight-color: transparent; }
+
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: #081615;
+  color: #F6F6F3;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Material Symbols weight */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Focus-visible accessibility ring (teal glow) */
+:focus-visible {
+  outline: 2px solid rgba(33, 245, 212, 0.5);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   GLASS CARD — GPU-promoted transforms
+   ============================================================ */
+.glass-card {
+  background: rgba(11, 27, 26, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition: box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              border-color 0.4s ease;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+  border-radius: 0.75rem;
+}
+
+.glass-card:hover {
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25),
+              0 0 24px rgba(33, 245, 212, 0.1),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================================
+   NOISE OVERLAY (fixed grain texture — pointer-events: none)
+   ============================================================ */
+.noise-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   VOLUMETRIC GLOW
+   ============================================================ */
+.volumetric-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(33, 245, 212, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ============================================================
+   FLOATING ANIMATION (CSS-only, GPU-composited)
+   ============================================================ */
+.float-1 { animation: float 4s ease-in-out infinite alternate; will-change: transform; }
+.float-2 { animation: float 5s ease-in-out infinite alternate; animation-delay: 0.5s; will-change: transform; }
+.float-3 { animation: float 6s ease-in-out infinite alternate; animation-delay: 1s; will-change: transform; }
+.float-4 { animation: float 7s ease-in-out infinite alternate; animation-delay: 1.5s; will-change: transform; }
+
+@keyframes float {
+  0%   { transform: translateY(0px) translateZ(0); }
+  100% { transform: translateY(-5px) translateZ(0); }
+}
+
+/* ============================================================
+   FLOATING PARTICLES
+   ============================================================ */
+.floating-particle {
+  position: absolute;
+  background-color: #21f5d4;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float-particle 15s linear infinite;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@keyframes float-particle {
+  0%   { transform: translateY(0) rotate(0deg) translateZ(0); opacity: 0; }
+  50%  { opacity: 0.4; }
+  100% { transform: translateY(-100vh) rotate(360deg) translateZ(0); opacity: 0; }
+}
+
+/* ============================================================
+   GLOW BUTTON — GPU-promoted transforms for 60fps
+   ============================================================ */
+.btn-primary {
+  @apply bg-primary-container text-on-primary font-label text-xs uppercase tracking-widest
+         py-3 px-6 rounded transition-all flex items-center justify-center gap-2
+         relative overflow-hidden;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+}
+
+.btn-primary:hover {
+  background-color: #34fddc;
+  box-shadow: 0 0 24px rgba(33, 245, 212, 0.35),
+              inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px) translateZ(0);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.97) translateZ(0);
+  transition-duration: 0.1s;
+}
+
+.btn-ghost {
+  @apply bg-transparent border text-secondary font-label text-xs uppercase tracking-widest
+         py-3 px-6 rounded flex items-center justify-center gap-2;
+  border-color: rgba(255, 255, 255, 0.06);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.btn-ghost:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(33, 245, 212, 0.3);
+  color: #21f5d4;
+  transform: translateY(-1px) translateZ(0);
+}
+
+.btn-ghost:active {
+  transform: translateY(0) scale(0.97) translateZ(0);
+  transition-duration: 0.1s;
+}
+
+/* ============================================================
+   GRID BACKGROUND
+   ============================================================ */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ============================================================
+   THINKING STATE (AI) — staggered cascade
+   ============================================================ */
+.thinking-step {
+  opacity: 0;
+  animation: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  will-change: transform, opacity;
+}
+.thinking-step:nth-child(1) { animation-delay: 0.2s; }
+.thinking-step:nth-child(2) { animation-delay: 0.9s; }
+.thinking-step:nth-child(3) { animation-delay: 1.6s; }
+.thinking-step:nth-child(4) { animation-delay: 2.3s; }
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px) translateZ(0); }
+  to   { opacity: 1; transform: translateY(0) translateZ(0); }
+}
+
+/* ============================================================
+   SCORE BAR ANIMATION (triggered via CSS class toggle)
+   ============================================================ */
+.score-bar-inner {
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: width;
+}
+.score-bar-inner.animated {
+  width: var(--target-width);
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR — sleek design
+   ============================================================ */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.02);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(33,245,212,0.2);
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(33,245,212,0.4);
+}
+
+/* Global scrollbar styling */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(33,245,212,0.25);
+}
+
+/* ============================================================
+   SPOTLIGHT
+   ============================================================ */
+.spotlight {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(33, 245, 212, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   PAGE TRANSITION WRAPPER (used by Framer Motion)
+   ============================================================ */
+.page-transition {
+  width: 100%;
+  min-height: 100vh;
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   SELECTION HIGHLIGHT
+   ============================================================ */
+::selection {
+  background: rgba(33, 245, 212, 0.25);
+  color: #F6F6F3;
+}
+
+/* ============================================================
+   DIFFICULTY BADGE
+   ============================================================ */
+.badge-easy    { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.2); }
+.badge-medium  { background: rgba(33,245,212,0.15); color: #21f5d4; border: 1px solid rgba(33,245,212,0.25); }
+.badge-hard    { background: rgba(251,191,36,0.15); color: #fcd34d; border: 1px solid rgba(251,191,36,0.25); }
+
+/* ============================================================
+   CANDIDATE CARD SELECTION STATE — smooth GPU-promoted transition
+   ============================================================ */
+.candidate-card {
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  will-change: transform, box-shadow;
+  backface-visibility: hidden;
+}
+.candidate-card:hover {
+  transform: translateY(-2px) translateZ(0);
+}
+.candidate-card.selected {
+  border-color: rgba(33, 245, 212, 0.5) !important;
+  box-shadow: 0 0 20px rgba(33, 245, 212, 0.15),
+              0 4px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px) translateZ(0);
+}
+
+/* ============================================================
+   TOPIC PILL
+   ============================================================ */
+.topic-done    { @apply text-primary-container bg-primary-container/10 border border-primary-container/20; }
+.topic-current { @apply text-secondary bg-secondary/10 border border-secondary/30; }
+.topic-pending { @apply text-text-muted bg-surface-container border border-border-glass; }
+
+/* ============================================================
+   BOUNCE (scroll indicator)
+   ============================================================ */
+@keyframes bounce-subtle {
+  0%,100% { transform: translateY(0) translateZ(0); }
+  50%      { transform: translateY(-6px) translateZ(0); }
+}
+.bounce-subtle {
+  animation: bounce-subtle 2s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ============================================================
+   STAGGER LIST ENTRY — 60fps GPU-safe
+   ============================================================ */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(10px) translateZ(0);
+  animation: stagger-fade-in 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-delay: calc(var(--i, 0) * 60ms);
+  will-change: transform, opacity;
+}
+
+@keyframes stagger-fade-in {
+  to { opacity: 1; transform: translateY(0) translateZ(0); }
+}
+
+/* ── Stagger for viewport-triggered whileInView animations ── */
+.stagger-container > * { --i: 0; }
+.stagger-container > *:nth-child(1)  { --i: 1; }
+.stagger-container > *:nth-child(2)  { --i: 2; }
+.stagger-container > *:nth-child(3)  { --i: 3; }
+.stagger-container > *:nth-child(4)  { --i: 4; }
+.stagger-container > *:nth-child(5)  { --i: 5; }
+.stagger-container > *:nth-child(6)  { --i: 6; }
+.stagger-container > *:nth-child(7)  { --i: 7; }
+.stagger-container > *:nth-child(8)  { --i: 8; }
+
+/* ── Shimmer skeleton (GPU-composited) ── */
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 25%,
+    rgba(255,255,255,0.07) 50%,
+    rgba(255,255,255,0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer-sweep 1.6s ease-in-out infinite;
+  will-change: background-position;
+}
+
+@keyframes shimmer-sweep {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Spring glow pulse (for active score rings / status badges) ── */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(33,245,212,0.25); }
+  50%       { box-shadow: 0 0 18px rgba(33,245,212,0.55); }
+}
+.glow-pulse {
+  animation: glow-pulse 2.4s ease-in-out infinite;
+  will-change: box-shadow;
+}
+
+/* ── Breathing glow (for status indicators) ── */
+@keyframes breathing-glow {
+  0%, 100% { opacity: 0.6; transform: scale(1) translateZ(0); }
+  50%       { opacity: 1; transform: scale(1.05) translateZ(0); }
+}
+.breathing-glow {
+  animation: breathing-glow 3s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ── Subtle entrance for interactive elements ── */
+@keyframes subtle-enter {
+  from { opacity: 0; transform: translateY(6px) scale(0.98) translateZ(0); }
+  to   { opacity: 1; transform: translateY(0) scale(1) translateZ(0); }
+}
+.subtle-enter {
+  animation: subtle-enter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  will-change: transform, opacity;
+}
+
+/* ── Input focus glow (expanding border glow) ── */
+.input-glow {
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.input-glow:focus, .input-glow:focus-within {
+  border-color: rgba(33, 245, 212, 0.4) !important;
+  box-shadow: 0 0 0 3px rgba(33, 245, 212, 0.08), 0 0 16px rgba(33, 245, 212, 0.06);
+}
+
+/* ── Reduced motion: disable all decorative animations ── */
+@media (prefers-reduced-motion: reduce) {
+  .stagger-item,
+  .shimmer-bg,
+  .floating-particle,
+  .float-1, .float-2, .float-3, .float-4,
+  .bounce-subtle,
+  .glow-pulse,
+  .breathing-glow,
+  .subtle-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .glass-card,
+  .candidate-card,
+  .btn-primary,
+  .btn-ghost {
+    transition-duration: 0.01ms !important;
+    will-change: auto !important;
+  }
+  .page-transition {
+    will-change: auto !important;
+  }
+}
+
+/* ============================================================
+   MOBILE INTERVIEW TAB BAR
+   ============================================================ */
+.mobile-tab-bar {
+  display: flex;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 50;
+  background: rgba(11, 27, 26, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 8px 0 env(safe-area-inset-bottom, 8px);
+}
+
+@media (min-width: 768px) {
+  .mobile-tab-bar { display: none; }
+}
+
+.mobile-tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8CA5A1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-tab-btn:active {
+  transform: scale(0.92);
+}
+
+.mobile-tab-btn.active {
+  color: #21f5d4;
+}
+
+.mobile-tab-btn .material-symbols-outlined {
+  font-size: 22px;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  transition: font-variation-settings 0.3s ease;
+}
+
+.mobile-tab-btn.active .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Extra bottom padding on mobile so content isn't hidden by tab bar */
+.mobile-panel-content {
+  padding-bottom: 72px;
+}
+@media (min-width: 768px) {
+  .mobile-panel-content { padding-bottom: 0; }
+}
+
+/* ── Mobile bottom nav (Sidebar replacement on xs) ── */
+.mobile-bottom-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 40;
+  background: rgba(8, 22, 21, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 6px 0 env(safe-area-inset-bottom, 6px);
+  justify-content: space-around;
+}
+
+@media (min-width: 768px) {
+  .mobile-bottom-nav { display: none; }
+}
+
+/* Ensure pages don't clip under fixed bottom nav on mobile */
+@media (max-width: 767px) {
+  main { padding-bottom: 80px !important; }
+}

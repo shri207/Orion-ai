@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Interview Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#d6e6e3",
+                        "secondary-fixed-dim": "#31dec3",
+                        "secondary-fixed": "#5bfbdf",
+                        "on-secondary-fixed": "#00201b",
+                        "primary-container": "#21f5d4",
+                        "secondary": "#44e9ce",
+                        "on-secondary": "#00382f",
+                        "inverse-primary": "#006b5b",
+                        "surface-container-lowest": "#041010",
+                        "secondary-container": "#00cdb3",
+                        "surface-container-high": "#1f2d2b",
+                        "surface-dim": "#081615",
+                        "on-background": "#d6e6e3",
+                        "outline-variant": "#3a4a46",
+                        "primary-fixed-dim": "#00dfc0",
+                        "on-tertiary": "#3c2f00",
+                        "on-error": "#690005",
+                        "on-primary-fixed": "#00201a",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#b9cac4",
+                        "primary-fixed": "#34fddc",
+                        "surface-bright": "#2e3c3b",
+                        "on-secondary-fixed-variant": "#005045",
+                        "on-tertiary-fixed": "#231b00",
+                        "on-primary": "#00382f",
+                        "on-surface": "#d6e6e3",
+                        "surface-tint": "#00dfc0",
+                        "background": "#081615",
+                        "on-primary-fixed-variant": "#005144",
+                        "tertiary": "#fff6e7",
+                        "surface-container": "#142221",
+                        "on-tertiary-container": "#745d00",
+                        "inverse-on-surface": "#253332",
+                        "tertiary-fixed-dim": "#e9c341",
+                        "surface-container-low": "#101e1d",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#005146",
+                        "tertiary-container": "#ffd754",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffe084",
+                        "outline": "#84948f",
+                        "surface-container-highest": "#293736",
+                        "on-primary-container": "#006c5c",
+                        "surface-variant": "#293736",
+                        "primary": "#dafff4",
+                        "surface": "#081615",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "surface-card": "#0B1B1A",
+                        "border-glass": "rgba(255, 255, 255, 0.06)",
+                        "glow-teal": "rgba(33, 245, 212, 0.15)"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["EB Garamond", "serif"],
+                        "display": ["EB Garamond", "serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .noise-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 9999; opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        .glass-card {
+            background-color: rgba(11, 27, 26, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .volumetric-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(33, 245, 212, 0.08) 0%, rgba(33, 245, 212, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen relative overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<div class="noise-bg"></div>
+<div class="volumetric-glow top-[-100px] left-[-100px]"></div>
+<div class="volumetric-glow bottom-[-200px] right-[-200px] opacity-50"></div>
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-full py-8 fixed left-0 top-0 w-64 z-40 bg-surface-container-lowest/90 backdrop-blur-2xl border-r border-outline-variant/10 shadow-2xl ease-in-out duration-400">
+<div class="px-6 mb-12">
+<h1 class="font-headline text-xl text-primary tracking-tight">Interview Agent</h1>
+<p class="font-body text-label-md text-on-surface-variant uppercase tracking-widest mt-1">Cinematic Intelligence</p>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body text-label-md uppercase tracking-widest">Dashboard</span>
+</a>
+<a class="bg-primary-container/10 text-primary border-r-4 border-primary px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">mic_external_on</span>
+<span class="font-body text-label-md uppercase tracking-widest">Reports</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body text-label-md uppercase tracking-widest">Talent Pool</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-body text-label-md uppercase tracking-widest">Analytics</span>
+</a>
+<a class="text-on-surface-variant hover:text-on-surface px-4 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body text-label-md uppercase tracking-widest">Archive</span>
+</a>
+</div>
+<div class="px-6 mt-auto">
+<button class="w-full bg-primary text-on-primary font-label text-sm uppercase tracking-wider py-3 px-4 rounded hover:bg-primary-fixed-dim transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-base">add</span>
+                New Interview
+            </button>
+<div class="mt-6 flex flex-col gap-2">
+<a class="text-on-surface-variant hover:text-on-surface flex items-center gap-3 text-sm" href="#">
+<span class="material-symbols-outlined text-lg">help_outline</span>
+                    Help
+                </a>
+<a class="text-on-surface-variant hover:text-on-surface flex items-center gap-3 text-sm mt-2" href="#">
+<span class="material-symbols-outlined text-lg">logout</span>
+                    Logout
+                </a>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="md:ml-64 p-6 md:p-12 lg:p-20 max-w-[1440px] mx-auto min-h-screen flex flex-col gap-12 relative z-10">
+<!-- Hero Section -->
+<header class="flex flex-col md:flex-row justify-between items-center gap-12 mb-8">
+<div class="flex-1 space-y-4">
+<h1 class="font-display text-4xl md:text-6xl text-primary font-normal tracking-tight leading-tight">Technical Assessment Report</h1>
+<p class="font-body text-lg text-on-surface-variant">Candidate: <span class="text-on-surface font-medium">Alexander Volkov</span> | Role: <span class="text-on-surface font-medium">Senior AI Architect</span></p>
+</div>
+<div class="relative w-48 h-48 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full transform -rotate-90" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.05)" stroke-width="2"></circle>
+<circle class="drop-shadow-[0_0_8px_rgba(33,245,212,0.5)]" cx="50" cy="50" fill="none" r="45" stroke="#21F5D4" stroke-dasharray="282.7" stroke-dashoffset="33.9" stroke-width="2"></circle>
+</svg>
+<div class="text-center">
+<div class="font-display text-5xl text-primary font-medium tracking-tighter">8.8</div>
+<div class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Overall Score</div>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8">
+<!-- Topic Breakdown -->
+<section class="glass-card rounded-xl p-8 col-span-1 md:col-span-7 flex flex-col gap-6 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+<h2 class="font-headline text-2xl text-on-surface mb-2 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">bar_chart</span>
+                    Topic Breakdown
+                </h2>
+<div class="space-y-5">
+<!-- Progress Item -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-body text-on-surface">Prompt Engineering</span>
+<span class="font-body text-primary-container">92%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<!-- Progress Item -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-body text-on-surface">RAG Optimization</span>
+<span class="font-body text-primary-container">85%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full opacity-80" style="width: 85%"></div>
+</div>
+</div>
+<!-- Progress Item -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-body text-on-surface">Agents Orchestration</span>
+<span class="font-body text-primary-container">88%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full opacity-90" style="width: 88%"></div>
+</div>
+</div>
+<!-- Progress Item -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-body text-on-surface">Vector Database Architecture</span>
+<span class="font-body text-primary-container">82%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full opacity-75" style="width: 82%"></div>
+</div>
+</div>
+<!-- Progress Item -->
+<div>
+<div class="flex justify-between text-sm mb-2">
+<span class="font-body text-on-surface">Deployment &amp; Scale</span>
+<span class="font-body text-primary-container">90%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full opacity-95" style="width: 90%"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Strengths & Weaknesses -->
+<section class="glass-card rounded-xl p-8 col-span-1 md:col-span-5 flex flex-col gap-8">
+<h2 class="font-headline text-2xl text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">balance</span>
+                    Assessment
+                </h2>
+<div class="flex flex-col gap-6">
+<div>
+<h3 class="font-label text-xs uppercase tracking-widest text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">add_circle</span> Strengths
+                        </h3>
+<ul class="space-y-3 font-body text-sm text-on-surface">
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 opacity-70"></span>
+                                Exceptional Architectural Clarity in RAG systems.
+                            </li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 opacity-70"></span>
+                                Deep understanding of Vector Search optimization.
+                            </li>
+</ul>
+</div>
+<div class="w-full h-px bg-outline-variant/30"></div>
+<div>
+<h3 class="font-label text-xs uppercase tracking-widest text-on-surface-variant mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-error/70">remove_circle</span> Areas to Probe
+                        </h3>
+<ul class="space-y-3 font-body text-sm text-on-surface">
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 rounded-full bg-error/50 mt-1.5 opacity-70"></span>
+                                Agent Orchestration Latency handling requires deeper discussion.
+                            </li>
+<li class="flex items-start gap-3">
+<span class="w-1.5 h-1.5 rounded-full bg-error/50 mt-1.5 opacity-70"></span>
+                                Edge Deployment Constraints knowledge appeared theoretical.
+                            </li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Timeline -->
+<section class="glass-card rounded-xl p-8 col-span-1 md:col-span-12">
+<h2 class="font-headline text-2xl text-on-surface mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">timeline</span>
+                    Interview Flow
+                </h2>
+<div class="relative flex justify-between items-center w-full px-4 mt-12 mb-4">
+<div class="absolute left-8 right-8 h-px bg-outline-variant/30 top-1/2 -translate-y-1/2 z-0"></div>
+<!-- Timeline Steps -->
+<div class="relative z-10 flex flex-col items-center gap-3 group cursor-default">
+<div class="w-3 h-3 rounded-full bg-primary-container shadow-[0_0_10px_rgba(33,245,212,0.4)]"></div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">Intro</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 group cursor-default">
+<div class="w-3 h-3 rounded-full bg-primary-container shadow-[0_0_10px_rgba(33,245,212,0.4)]"></div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">Fundamentals</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 group cursor-default">
+<div class="w-4 h-4 rounded-full bg-primary shadow-[0_0_15px_rgba(33,245,212,0.6)] border-2 border-surface-container-lowest"></div>
+<span class="font-label text-[10px] uppercase tracking-widest text-primary font-bold">Deep Dive</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 group cursor-default">
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-outline-variant"></div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">Design</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 group cursor-default">
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-outline-variant"></div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">Closing</span>
+</div>
+</div>
+</section>
+<!-- AI Suggestions -->
+<section class="glass-card rounded-xl p-8 col-span-1 md:col-span-12 relative overflow-hidden">
+<div class="absolute right-0 top-0 w-64 h-64 bg-primary-container/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+<h2 class="font-headline text-2xl text-on-surface mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">lightbulb</span>
+                    AI Synthesis &amp; Next Steps
+                </h2>
+<div class="prose prose-invert max-w-none font-body text-on-surface-variant leading-relaxed">
+<p class="text-base md:text-lg mb-4">
+                        The candidate demonstrated exceptional prowess in architectural design, specifically concerning Retrieval-Augmented Generation workflows. However, the synthesis engine flagged potential gaps in practical deployment experience regarding highly concurrent, distributed agentic systems.
+                    </p>
+<p class="text-base md:text-lg">
+<strong>Recommendation:</strong> Proceed to final round. Focus the technical deep-dive on <span class="text-primary-container font-medium">Distributed Agentic Systems</span>. Present a scenario involving high-latency edge nodes and require the candidate to design a fault-tolerant orchestration layer.
+                    </p>
+</div>
+</section>
+</div>
+</main>
+</body></html>

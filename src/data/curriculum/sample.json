@@ -1,0 +1,64 @@
+{
+  "version": "1.0",
+  "modules": [
+    {
+      "id": "node-js-basics",
+      "name": "Node.js Basics",
+      "description": "Core concepts of Node.js",
+      "topics": [
+        {
+          "id": "event-loop",
+          "name": "The Event Loop",
+          "description": "Understanding the Node.js event loop and asynchronous programming.",
+          "subtopics": [
+            {
+              "id": "phases",
+              "name": "Event Loop Phases",
+              "learningObjectives": [
+                "Explain the different phases of the event loop",
+                "Understand nextTick vs setImmediate"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "streams",
+          "name": "Streams and Buffers",
+          "description": "Working with binary data and streams.",
+          "subtopics": [
+            {
+              "id": "readable-streams",
+              "name": "Readable Streams",
+              "learningObjectives": [
+                "Understand how to consume readable streams",
+                "Pipe streams for efficient data handling"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "express-js",
+      "name": "Express.js Fundamentals",
+      "description": "Building web applications with Express.",
+      "topics": [
+        {
+          "id": "middleware",
+          "name": "Middleware Patterns",
+          "description": "How middleware functions work in Express.",
+          "subtopics": [
+            {
+              "id": "error-handling",
+              "name": "Error Handling Middleware",
+              "learningObjectives": [
+                "Create a custom error handling middleware",
+                "Understand the order of middleware execution"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

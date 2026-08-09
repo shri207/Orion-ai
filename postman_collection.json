@@ -1,0 +1,54 @@
+{
+  "info": {
+    "name": "AI Interview Agent",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Start Interview",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "http://localhost:5000/api/interview/start", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "interview", "start"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"candidateId\": \"cand_123\",\n  \"curriculum\": \"Java\"\n}"
+        }
+      }
+    },
+    {
+      "name": "2. Submit Answer",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "http://localhost:5000/api/interview/answer", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "interview", "answer"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sessionId\": \"sess_xyz\",\n  \"answer\": \"Polymorphism allows objects of different classes to be treated as objects of a common superclass.\"\n}"
+        }
+      }
+    },
+    {
+      "name": "3. Get Interview State",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "http://localhost:5000/api/interview/sess_xyz", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "interview", "sess_xyz"] }
+      }
+    },
+    {
+      "name": "4. End Interview",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": { "raw": "http://localhost:5000/api/interview/end", "protocol": "http", "host": ["localhost"], "port": "5000", "path": ["api", "interview", "end"] }
+      }
+    }
+  ]
+}

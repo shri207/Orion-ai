@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>31-Day AI Cohort - Curriculum Explorer</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#101e1d",
+                        "surface-container-highest": "#293736",
+                        "error": "#ffb4ab",
+                        "outline": "#84948f",
+                        "on-secondary-fixed": "#00201b",
+                        "on-primary": "#00382f",
+                        "inverse-surface": "#d6e6e3",
+                        "tertiary-fixed": "#ffe084",
+                        "on-secondary-fixed-variant": "#005045",
+                        "secondary-container": "#00cdb3",
+                        "on-surface-variant": "#b9cac4",
+                        "secondary-fixed": "#5bfbdf",
+                        "on-secondary-container": "#005146",
+                        "on-primary-container": "#006c5c",
+                        "on-error": "#690005",
+                        "on-secondary": "#00382f",
+                        "on-primary-fixed": "#00201a",
+                        "surface-container-lowest": "#041010",
+                        "surface-bright": "#2e3c3b",
+                        "on-tertiary-fixed-variant": "#574500",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#3a4a46",
+                        "surface-tint": "#00dfc0",
+                        "primary-fixed-dim": "#00dfc0",
+                        "inverse-primary": "#006b5b",
+                        "on-primary-fixed-variant": "#005144",
+                        "on-tertiary-container": "#745d00",
+                        "primary": "#dafff4",
+                        "on-surface": "#d6e6e3",
+                        "secondary-fixed-dim": "#31dec3",
+                        "surface-dim": "#081615",
+                        "secondary": "#44e9ce",
+                        "on-background": "#d6e6e3",
+                        "on-tertiary-fixed": "#231b00",
+                        "tertiary": "#fff6e7",
+                        "surface-variant": "#293736",
+                        "surface-container-high": "#1f2d2b",
+                        "inverse-on-surface": "#253332",
+                        "background": "#081615",
+                        "tertiary-container": "#ffd754",
+                        "surface-container": "#142221",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#34fddc",
+                        "surface": "#081615",
+                        "on-tertiary": "#3c2f00",
+                        "tertiary-fixed-dim": "#e9c341",
+                        "primary-container": "#21f5d4",
+                        "border-glass": "rgba(255, 255, 255, 0.06)",
+                        "glow-teal": "rgba(33, 245, 212, 0.15)",
+                        "surface-card": "#0B1B1A"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["EB Garamond", "serif"],
+                        "display": ["EB Garamond", "serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    },
+                    "backgroundImage": {
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.03%22/%3E%3C/svg%3E')"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #081615;
+            color: #d6e6e3;
+        }
+        .glass-card {
+            background: rgba(11, 27, 26, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(33, 245, 212, 0.4);
+            box-shadow: 0 0 30px rgba(33, 245, 212, 0.15);
+            transform: translateY(-4px) scale(1.02);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            z-index: 10;
+        }
+        .bg-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(33, 245, 212, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+<!-- Atmospheric Background Image -->
+<div class="fixed inset-0 z-[-2] w-full h-full">
+<img alt="" class="w-full h-full object-cover opacity-30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9WT-q66P9kdGA5JCNmaoQYYcd_6-Gta5TDXnyKvuLPWODQOPFNntscdiUy3XfUDRzCwI3ZT_QmMNt1YnnhgavaNkyDlz9y8pJc_fce7U5AWluZo4XAayAstlhutgBu01m26dw8ycqmuvaPyrCmmxzYOW6QmNSFRyoqslNJCZzaWwY54d5LF2Emni7w3GjvkJFYfyrx19og0WGsDFYr_-AHOt0je87tUyFW_tdTGdwWm1YBm1r6Ud2mw"/>
+<div class="absolute inset-0 bg-noise opacity-50 mix-blend-overlay"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-surface/40 via-surface/80 to-surface"></div>
+</div>
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface-container/80 backdrop-blur-xl border-b border-white/5 shadow-xl transition-all duration-400 ease-in-out">
+<div class="flex justify-between items-center px-8 py-4 max-w-[1440px] mx-auto">
+<div class="flex items-center gap-12">
+<a class="font-display text-2xl font-normal text-primary tracking-tighter" href="#">
+                    Interview Agent
+                </a>
+<div class="hidden md:flex gap-8">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors ease-in-out duration-400 font-label text-sm tracking-wide" href="#">Dashboard</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 ease-in-out duration-400 font-label text-sm tracking-wide" href="#">Interviews</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors ease-in-out duration-400 font-label text-sm tracking-wide" href="#">Analytics</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 rounded-full p-2">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 rounded-full p-2">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-sm font-label text-sm hover:bg-primary-fixed-dim transition-colors ease-in-out duration-400 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                    New Interview
+                </button>
+<div class="w-10 h-10 rounded-full border border-border-glass overflow-hidden cursor-pointer hover:border-primary-container transition-colors">
+<img class="w-full h-full object-cover" data-alt="A cinematic portrait of a professional in dramatic, moody emerald lighting, looking thoughtfully off-camera. The image should feel like a still from a high-end sci-fi film, emphasizing intelligence and focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIhfkZiyZasw0LLzsQ6nfpZorG2RDdRrspDWc8-XVBYe6LxI5IWhLUJTfroUNkmX1dWOBLA9hNRBYHwemWQr1kKz_8lPk-C9K38kq7Qc3JKpwDnjKD58CwKeXbHmkpJbfgFkzh94XOu1cSZ4LL9TPPDbOePHtyXY_PAX2n9KDrZtT8idXC_BfZfRJfJPmJ-EaNdMNTTImOMx0bP1meVUkbvt0bZTKazhZwJRq6Jttrw8uBSUITCD_Msg"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-[1440px] mx-auto w-full relative">
+<div class="bg-glow"></div>
+<!-- Header -->
+<header class="mb-16 md:mb-24 text-center md:text-left max-w-3xl mx-auto md:mx-0">
+<h1 class="font-display text-5xl md:text-7xl text-primary tracking-tighter leading-tight mb-4 drop-shadow-lg">
+                Curriculum Explorer
+            </h1>
+<p class="font-body text-on-surface-variant text-lg md:text-xl max-w-2xl font-light">
+                Embark on a 31-day journey mastering AI architectures, agentic workflows, and advanced reasoning models.
+            </p>
+</header>
+<!-- Bento Grid / Constellation Layout -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 auto-rows-[200px]">
+<!-- Day 01 -->
+<div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between cursor-pointer lg:col-span-2 lg:row-span-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transform translate-y-2">
+<div class="flex justify-between items-start mb-4">
+<span class="font-display text-4xl text-primary-container opacity-80 group-hover:opacity-100 transition-opacity">Day 01</span>
+<span class="material-symbols-outlined text-primary-container opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1 group-hover:-translate-y-1">arrow_outward</span>
+</div>
+<div>
+<h3 class="font-display text-2xl text-primary mb-2 leading-snug">LLM Foundations &amp; Architecture</h3>
+<p class="text-on-surface-variant text-sm font-light mb-6 line-clamp-3">Deep dive into transformer models, attention mechanisms, and the core mathematical principles driving modern large language models.</p>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full shadow-[0_0_8px_rgba(33,245,212,0.8)]" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+<!-- Day 02 -->
+<div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-start mb-2">
+<span class="font-display text-2xl text-on-surface-variant group-hover:text-primary transition-colors">Day 02</span>
+</div>
+<div>
+<h3 class="font-display text-xl text-primary mb-2 leading-tight">Prompt Engineering Mastery</h3>
+<div class="w-full bg-surface-container-highest h-0.5 rounded-full overflow-hidden mt-4">
+<div class="bg-primary-container h-full shadow-[0_0_8px_rgba(33,245,212,0.8)]" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+<!-- Day 03 -->
+<div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between cursor-pointer shadow-[0_4px_24px_rgba(0,0,0,0.45)] transform -translate-y-2 lg:row-span-2">
+<div class="flex justify-between items-start mb-2">
+<span class="font-display text-2xl text-on-surface-variant group-hover:text-primary transition-colors">Day 03</span>
+</div>
+<div>
+<div class="h-12 w-12 rounded-lg bg-surface-container-high border border-white/5 flex items-center justify-center mb-4 group-hover:border-primary-container/30 transition-colors">
+<span class="material-symbols-outlined text-primary-container">account_tree</span>
+</div>
+<h3 class="font-display text-xl text-primary mb-2 leading-tight">RAG Architectures</h3>
+<p class="text-on-surface-variant text-xs font-light mt-2">Retrieval-Augmented Generation implementation.</p>
+</div>
+</div>
+<!-- Day 04 -->
+<div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between cursor-pointer shadow-[0_2px_15px_rgba(0,0,0,0.3)] opacity-80 hover:opacity-100">
+<div class="flex justify-between items-start mb-2">
+<span class="font-display text-2xl text-on-surface-variant group-hover:text-primary transition-colors">Day 04</span>
+</div>
+<div>
+<h3 class="font-display text-xl text-primary mb-2 leading-tight">Vector Databases</h3>
+</div>
+</div>
+<!-- Day 05 -->
+<div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between cursor-pointer lg:col-span-2 shadow-[0_6px_28px_rgba(0,0,0,0.4)]">
+<div class="flex justify-between items-start mb-2">
+<span class="font-display text-2xl text-on-surface-variant group-hover:text-primary transition-colors">Day 05</span>
+<span class="px-3 py-1 rounded-sm bg-primary-container/10 text-primary-container text-[10px] font-label uppercase tracking-widest border border-primary-container/20">Current</span>
+</div>
+<div>
+<h3 class="font-display text-2xl text-primary mb-2 leading-tight">Agentic Workflows &amp; Multi-Agent Systems</h3>
+<div class="w-full bg-surface-container-highest h-0.5 rounded-full overflow-hidden mt-4">
+<div class="bg-primary-container h-full shadow-[0_0_8px_rgba(33,245,212,0.8)]" style="width: 45%;"></div>
+</div>
+</div>
+</div>
+<!-- More Days Fill ... Simplified for output length -->
+<!-- Day 06 -->
+<div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.2)] opacity-60 hover:opacity-100 transform translate-y-4">
+<div class="flex justify-between items-start mb-2">
+<span class="font-display text-xl text-outline group-hover:text-primary transition-colors">Day 06</span>
+</div>
+<div>
+<h3 class="font-display text-lg text-on-surface-variant group-hover:text-primary mb-2 leading-tight">Fine-Tuning Strategies</h3>
+</div>
+</div>
+<!-- Day 07 -->
+<div class="glass-card rounded-xl p-6 relative group flex flex-col justify-between cursor-pointer shadow-[0_2px_10px_rgba(0,0,0,0.2)] opacity-60 hover:opacity-100">
+<div class="flex justify-between items-start mb-2">
+<span class="font-display text-xl text-outline group-hover:text-primary transition-colors">Day 07</span>
+</div>
+<div>
+<h3 class="font-display text-lg text-on-surface-variant group-hover:text-primary mb-2 leading-tight">Evaluation &amp; Metrics</h3>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 bg-surface-container-lowest border-t border-white/5 relative z-10">
+<div class="max-w-[1440px] mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="font-display text-xl text-on-surface tracking-tighter">
+                Interview Agent
+            </div>
+<div class="flex flex-wrap justify-center gap-6 md:gap-8">
+<a class="font-body text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-400 ease-out" href="#">Privacy Policy</a>
+<a class="font-body text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-400 ease-out" href="#">Terms of Service</a>
+<a class="font-body text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-400 ease-out" href="#">Help Center</a>
+<a class="font-body text-label-md text-on-surface-variant hover:text-secondary transition-colors duration-400 ease-out" href="#">Contact</a>
+</div>
+<div class="font-body text-label-md text-on-surface-variant text-center md:text-right">
+                © 2024 Interview Agent. Precision in Every Response.
+            </div>
+</div>
+</footer>
+</body></html>

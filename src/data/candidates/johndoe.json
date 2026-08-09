@@ -1,0 +1,45 @@
+{
+  "id": "cand-001",
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "role": "Senior Backend Engineer",
+  "yearsOfExperience": 7,
+  "primarySkills": ["Node.js", "TypeScript", "Express", "PostgreSQL"],
+  "secondarySkills": ["React", "Docker", "AWS", "Redis"],
+  "experience": [
+    {
+      "company": "Tech Corp",
+      "role": "Backend Engineer",
+      "years": 4
+    },
+    {
+      "company": "Startup Inc",
+      "role": "Software Developer",
+      "years": 3
+    }
+  ],
+  "projects": [
+    {
+      "name": "E-Commerce API",
+      "description": "Built a highly scalable e-commerce API supporting 10k RPS",
+      "technologies": ["Node.js", "Redis", "PostgreSQL"]
+    }
+  ],
+  "education": [
+    {
+      "degree": "BSc Computer Science",
+      "institution": "University of Technology",
+      "year": 2018
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Solutions Architect",
+      "issuer": "Amazon Web Services",
+      "year": 2021
+    }
+  ],
+  "resumeSummary": "Experienced backend engineer with a strong focus on scalable Node.js microservices and database optimization.",
+  "preferredDifficulty": "Hard",
+  "preferredLanguage": "TypeScript"
+}
